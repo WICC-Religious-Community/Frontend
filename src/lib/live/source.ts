@@ -73,7 +73,12 @@ class LiveConnection {
     if (topics.length === 0 || document.hidden) return;
     if (env.NEXT_PUBLIC_LIVE_TRANSPORT === 'poll') return; // polling handled per-hook
 
-    const url = `${env.NEXT_PUBLIC_API_URL}/v1/stream?topics=${encodeURIComponent(topics.join(','))}`;
+    // In mock mode there is no backend yet — Next's own `/api/mock-stream`
+    // route generates a genuine SSE feed instead (see that route's doc
+    // comment). Live mode points straight at the backend's stream.
+    const base =
+      env.NEXT_PUBLIC_API_MODE === 'mock' ? '/api/mock-stream' : `${env.NEXT_PUBLIC_API_URL}/v1/stream`;
+    const url = `${base}?topics=${encodeURIComponent(topics.join(','))}`;
     const source = new EventSource(url, { withCredentials: false });
     this.source = source;
 
