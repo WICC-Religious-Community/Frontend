@@ -1,0 +1,635 @@
+openapi: 3.1.0
+info:
+  title: WICC Backend API (assumed contract)
+  version: '1.0'
+  description: >
+    This spec is authored by the frontend team as the assumed contract for the
+    separate WICC backend, since no backend spec exists yet. `npm run api:types`
+    generates `schema.d.ts` from this file. When the backend team publishes
+    their own OpenAPI document, replace this file with theirs and regenerate —
+    every consumer goes through `src/domain/*/mappers.ts`, so a contract change
+    surfaces as a type error in exactly one place per aggregate.
+servers:
+  - url: /v1
+paths:
+  /site-settings:
+    get:
+      operationId: getSiteSettings
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SiteSettings' }
+
+  /service-status:
+    get:
+      operationId: getServiceStatus
+      description: Snapshot for the live-service banner; also streamed over SSE on the `service-status` topic.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ServiceStatus' }
+
+  /stream:
+    get:
+      operationId: getLiveStream
+      description: >
+        text/event-stream. `topics` is a comma-separated list (e.g.
+        `service-status,testimonials,event-availability:evt_123`). Each event's
+        `event:` field is the topic name; `data:` is the JSON payload for that
+        topic's resource. Supports `Last-Event-ID` for resume.
+      parameters:
+        - name: topics
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            text/event-stream: {}
+
+  /sermons:
+    get:
+      operationId: listSermons
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20 }
+        - name: cursor
+          in: query
+          schema: { type: string }
+        - name: series
+          in: query
+          schema: { type: string }
+        - name: speaker
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SermonPage' }
+
+  /sermons/{slug}:
+    get:
+      operationId: getSermon
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Sermon' }
+
+  /sermon-series:
+    get:
+      operationId: listSermonSeries
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/SermonSeries' }
+
+  /sermon-series/{slug}:
+    get:
+      operationId: getSermonSeries
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SermonSeries' }
+
+  /events:
+    get:
+      operationId: listEvents
+      parameters:
+        - name: view
+          in: query
+          schema: { type: string, enum: [upcoming, past, all], default: upcoming }
+        - name: ministry
+          in: query
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20 }
+        - name: cursor
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EventPage' }
+
+  /events/{slug}:
+    get:
+      operationId: getEvent
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Event' }
+
+  /ministries:
+    get:
+      operationId: listMinistries
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Ministry' }
+
+  /ministries/{slug}:
+    get:
+      operationId: getMinistry
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Ministry' }
+
+  /leaders:
+    get:
+      operationId: listLeaders
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Leader' }
+
+  /leaders/{slug}:
+    get:
+      operationId: getLeader
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Leader' }
+
+  /locations:
+    get:
+      operationId: listLocations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Location' }
+
+  /locations/{slug}:
+    get:
+      operationId: getLocation
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Location' }
+
+  /blog-posts:
+    get:
+      operationId: listBlogPosts
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20 }
+        - name: cursor
+          in: query
+          schema: { type: string }
+        - name: tag
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BlogPostPage' }
+
+  /blog-posts/{slug}:
+    get:
+      operationId: getBlogPost
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BlogPost' }
+
+  /testimonials:
+    get:
+      operationId: listTestimonials
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer, default: 10 }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Testimonial' }
+
+  /giving/accounts:
+    get:
+      operationId: listGivingAccounts
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/GivingAccount' }
+
+  /giving/campaigns:
+    get:
+      operationId: listGivingCampaigns
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/GivingCampaign' }
+
+  /pages/{slug}:
+    get:
+      operationId: getPage
+      description: Admin-composed block pages, rendered by `app/[slug]/page.tsx` via `<BlockRenderer>`.
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Page' }
+
+  /forms/contact:
+    post:
+      operationId: submitContactForm
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ContactSubmission' }
+      responses:
+        '202': { description: Accepted }
+
+  /forms/prayer:
+    post:
+      operationId: submitPrayerRequest
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PrayerSubmission' }
+      responses:
+        '202': { description: Accepted }
+
+  /forms/connect:
+    post:
+      operationId: submitConnectCard
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ConnectSubmission' }
+      responses:
+        '202': { description: Accepted }
+
+  /forms/newsletter:
+    post:
+      operationId: subscribeNewsletter
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NewsletterSubmission' }
+      responses:
+        '202': { description: Accepted }
+
+components:
+  schemas:
+    Address:
+      type: object
+      required: [streetAddress, locality, country]
+      properties:
+        streetAddress: { type: string }
+        locality: { type: string }
+        region: { type: string }
+        country: { type: string }
+        mapUrl: { type: string }
+
+    ServiceTime:
+      type: object
+      required: [dayOfWeek, opens, label]
+      properties:
+        dayOfWeek: { type: array, items: { type: string } }
+        opens: { type: string, example: '09:00' }
+        closes: { type: string, example: '11:00' }
+        label: { type: string, example: 'Sunday Worship' }
+        timezone: { type: string, example: 'Africa/Lagos' }
+
+    SocialLinks:
+      type: object
+      properties:
+        facebook: { type: string }
+        instagram: { type: string }
+        youtube: { type: string }
+        tiktok: { type: string }
+        x: { type: string }
+        whatsapp: { type: string }
+
+    SiteSettings:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+        description: { type: string }
+        logoUrl: { type: string }
+        phone: { type: string }
+        email: { type: string }
+        address: { $ref: '#/components/schemas/Address' }
+        socialLinks: { $ref: '#/components/schemas/SocialLinks' }
+        serviceTimes:
+          type: array
+          items: { $ref: '#/components/schemas/ServiceTime' }
+        announcement:
+          type: object
+          properties:
+            enabled: { type: boolean }
+            text: { type: string }
+            href: { type: string }
+
+    ServiceStatus:
+      type: object
+      required: [isLive]
+      properties:
+        isLive: { type: boolean }
+        label: { type: string, example: 'Sunday Worship' }
+        streamUrl: { type: string }
+        startedAt: { type: string, format: date-time }
+        nextServiceAt: { type: string, format: date-time }
+
+    Speaker:
+      type: object
+      required: [id, name]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        photoUrl: { type: string }
+
+    SermonSeries:
+      type: object
+      required: [id, slug, title]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        title: { type: string }
+        description: { type: string }
+        coverUrl: { type: string }
+        sermonCount: { type: integer }
+
+    Sermon:
+      type: object
+      required: [id, slug, title, publishedAt]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        title: { type: string }
+        description: { type: string }
+        speaker: { $ref: '#/components/schemas/Speaker' }
+        series: { $ref: '#/components/schemas/SermonSeries' }
+        videoUrl: { type: string }
+        audioUrl: { type: string }
+        thumbnailUrl: { type: string }
+        publishedAt: { type: string, format: date-time }
+        durationSeconds: { type: integer }
+        scripture: { type: array, items: { type: string } }
+        topics: { type: array, items: { type: string } }
+
+    SermonPage:
+      type: object
+      required: [items]
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/Sermon' } }
+        nextCursor: { type: string, nullable: true }
+
+    Event:
+      type: object
+      required: [id, slug, title, startAt]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        title: { type: string }
+        description: { type: string }
+        startAt: { type: string, format: date-time }
+        endAt: { type: string, format: date-time }
+        isOnline: { type: boolean }
+        locationName: { type: string }
+        coverUrl: { type: string }
+        registerUrl: { type: string, nullable: true }
+        capacity: { type: integer, nullable: true }
+        seatsTaken: { type: integer, nullable: true }
+        ministrySlug: { type: string, nullable: true }
+
+    EventPage:
+      type: object
+      required: [items]
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/Event' } }
+        nextCursor: { type: string, nullable: true }
+
+    Ministry:
+      type: object
+      required: [id, slug, name]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        name: { type: string }
+        summary: { type: string }
+        descriptionHtml: { type: string }
+        coverUrl: { type: string }
+        meetingSchedule: { type: string }
+        leader: { $ref: '#/components/schemas/Speaker' }
+
+    Leader:
+      type: object
+      required: [id, slug, name]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        name: { type: string }
+        role: { type: string }
+        bio: { type: string }
+        photoUrl: { type: string }
+        order: { type: integer }
+
+    Location:
+      type: object
+      required: [id, slug, name]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        name: { type: string }
+        isMain: { type: boolean }
+        address: { $ref: '#/components/schemas/Address' }
+        phone: { type: string }
+        coverUrl: { type: string }
+        serviceTimes:
+          type: array
+          items: { $ref: '#/components/schemas/ServiceTime' }
+
+    BlogPost:
+      type: object
+      required: [id, slug, title, publishedAt]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        title: { type: string }
+        excerpt: { type: string }
+        contentHtml: { type: string }
+        coverUrl: { type: string }
+        authorName: { type: string }
+        publishedAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        tags: { type: array, items: { type: string } }
+
+    BlogPostPage:
+      type: object
+      required: [items]
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/BlogPost' } }
+        nextCursor: { type: string, nullable: true }
+
+    Testimonial:
+      type: object
+      required: [id, name, quote, submittedAt]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        photoUrl: { type: string }
+        quote: { type: string }
+        submittedAt: { type: string, format: date-time }
+
+    GivingAccount:
+      type: object
+      required: [id, label, bankName, accountNumber, accountName]
+      properties:
+        id: { type: string }
+        label: { type: string }
+        bankName: { type: string }
+        accountNumber: { type: string }
+        accountName: { type: string }
+        currency: { type: string, example: NGN }
+
+    GivingCampaign:
+      type: object
+      required: [id, title, goalAmount, raisedAmount, currency]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        description: { type: string }
+        goalAmount: { type: number }
+        raisedAmount: { type: number }
+        currency: { type: string }
+        endsAt: { type: string, format: date-time, nullable: true }
+
+    Block:
+      type: object
+      required: [type]
+      properties:
+        type:
+          type: string
+          enum: [hero, richText, mediaSplit, cardGrid, ctaBanner, faq, gallery, scriptureQuote]
+        data:
+          type: object
+          additionalProperties: true
+
+    Page:
+      type: object
+      required: [slug, title, blocks]
+      properties:
+        slug: { type: string }
+        title: { type: string }
+        description: { type: string }
+        blocks: { type: array, items: { $ref: '#/components/schemas/Block' } }
+
+    ContactSubmission:
+      type: object
+      required: [name, email, message]
+      properties:
+        name: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string }
+        subject: { type: string }
+        message: { type: string }
+
+    PrayerSubmission:
+      type: object
+      required: [name, request]
+      properties:
+        name: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string }
+        request: { type: string }
+        isConfidential: { type: boolean }
+
+    ConnectSubmission:
+      type: object
+      required: [name, email, interest]
+      properties:
+        name: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string }
+        interest:
+          type: string
+          enum: [visit, membership, groups, volunteering, baptism]
+        notes: { type: string }
+
+    NewsletterSubmission:
+      type: object
+      required: [email]
+      properties:
+        email: { type: string, format: email }
