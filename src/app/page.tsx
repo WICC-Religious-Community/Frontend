@@ -1,69 +1,125 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Container } from "@/components/layout/container";
+import { Section } from "@/components/layout/section";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Display, H2, Lead, Muted, Text } from "@/components/ui/typography";
+import { siteConfig } from "@/config/site";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      <Section className="pt-24 sm:pt-32">
+        <Container className="flex flex-col items-start gap-6">
+          <Badge variant="secondary">Design system preview</Badge>
+          <Display>
+            A warm, modern home
+            <br className="hidden sm:block" />
+            for {siteConfig.name}.
+          </Display>
+          <Lead className="max-w-2xl">{siteConfig.description}</Lead>
+          <div className="flex flex-wrap gap-3 pt-2">
+            <Button size="lg">Get involved</Button>
+            <Button size="lg" variant="outline">
+              Learn more
+            </Button>
+            <Button size="lg" variant="link" asChild>
+              <Link href="#components">View components →</Link>
+            </Button>
+          </div>
+        </Container>
+      </Section>
+
+      <Separator />
+
+      <Section id="components">
+        <Container className="flex flex-col gap-16">
+          <div className="flex flex-col gap-4">
+            <div>
+              <H2>Buttons</H2>
+              <Muted>Every variant and size in the system.</Muted>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button variant="primary">Primary</Button>
+              <Button variant="secondary">Secondary</Button>
+              <Button variant="outline">Outline</Button>
+              <Button variant="ghost">Ghost</Button>
+              <Button variant="link">Link</Button>
+              <Button variant="destructive">Destructive</Button>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button size="sm">Small</Button>
+              <Button size="md">Medium</Button>
+              <Button size="lg">Large</Button>
+              <Button size="icon" aria-label="Add item">
+                +
+              </Button>
+              <Button disabled>Disabled</Button>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div>
+              <H2>Cards</H2>
+              <Muted>A content container with header, body, and footer slots.</Muted>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <Card>
+                <CardHeader>
+                  <Badge className="w-fit">New</Badge>
+                  <CardTitle>Weekly gathering</CardTitle>
+                  <CardDescription>
+                    Join us every Sunday for worship, community, and connection.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Text>10:00 AM &middot; Main Hall</Text>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Small groups</CardTitle>
+                  <CardDescription>Find a group near you and grow together.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Text>Meets weekly &middot; All ages welcome</Text>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Get involved</CardTitle>
+                  <CardDescription>Volunteer opportunities across every ministry.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Text>Sign up in under five minutes.</Text>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div>
+              <H2>Form elements</H2>
+              <Muted>Inputs, labels, and focus states.</Muted>
+            </div>
+            <div className="flex max-w-sm flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" placeholder="Jane Doe" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="jane@example.com" />
+              </div>
+              <Button className="w-fit">Submit</Button>
+            </div>
+          </div>
+        </Container>
+      </Section>
+    </>
   );
 }
