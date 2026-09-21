@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { LEGAL_NAV, SITE } from "@/config/site";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -9,14 +9,23 @@ import { getPage } from "@/domain/pages/server";
 import { QueryProvider } from "@/lib/query/provider";
 import { SiteShell } from "@/components/layout/site-shell";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+// Self-hosted (latin subset) so builds and dev never depend on reaching
+// Google Fonts. The variable names are the ones `globals.css` reads: a warm
+// display serif for headings, a grotesk sans for everything else.
+const body = localFont({
+  src: "./fonts/Inter-Variable.woff2",
+  variable: "--font-body",
+  weight: "100 900",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const display = localFont({
+  src: [
+    { path: "./fonts/Fraunces-Variable.woff2", weight: "400 700", style: "normal" },
+    { path: "./fonts/Fraunces-Italic-Variable.woff2", weight: "400 700", style: "italic" },
+  ],
+  variable: "--font-display-face",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -59,7 +68,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${body.variable} ${display.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <JsonLd data={organizationSchema} />
