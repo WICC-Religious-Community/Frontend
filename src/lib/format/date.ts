@@ -1,50 +1,146 @@
-const DEFAULT_LOCALE = "en-US";
+/**
+ * Date/time formatting. Pure functions, no framework dependency — every value
+ * goes in and out as an ISO string or Date so server and client agree byte
+ * for byte (no hydration mismatch from locale/timezone drift).
+ */
 
-function toDate(value: Date | string): Date {
-  return typeof value === "string" ? new Date(value) : value;
+const DAY_MS = 86_400_000;
+
+export function toDate(value: string | Date): Date {
+  return value instanceof Date ? value : new Date(value);
 }
 
-export function formatDate(value: Date | string, options?: Intl.DateTimeFormatOptions): string {
-  return new Intl.DateTimeFormat(DEFAULT_LOCALE, { dateStyle: "long", ...options }).format(
-    toDate(value)
-  );
+/** "Sunday, 12 October 2026" */
+export function formatDate(
+  value: string | Date,
+  opts: Intl.DateTimeFormatOptions = {}
+): string {
+  return toDate(value).toLocaleDateString('en-US', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+    ...opts,
+  });
 }
 
-export function formatTime(value: Date | string, options?: Intl.DateTimeFormatOptions): string {
-  return new Intl.DateTimeFormat(DEFAULT_LOCALE, { timeStyle: "short", ...options }).format(
-    toDate(value)
-  );
+/** "Oct 12" — compact, for cards/lists. */
+export function formatShortDate(value: string | Date): string {
+  return toDate(value).toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'short',
+    timeZone: 'UTC',
+  });
 }
 
-export function formatDateTime(value: Date | string, options?: Intl.DateTimeFormatOptions): string {
-  return new Intl.DateTimeFormat(DEFAULT_LOCALE, {
-    dateStyle: "long",
-    timeStyle: "short",
-    ...options,
-  }).format(toDate(value));
+/** "9:00 AM" */
+export function formatTime(value: string | Date, timeZoneLabel?: string): string {
+  const time = toDate(value).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'UTC',
+  });
+  return timeZoneLabel ? `${time} ${timeZoneLabel}` : time;
 }
 
-const RELATIVE_TIME_DIVISIONS: Array<{ amount: number; unit: Intl.RelativeTimeFormatUnit }> = [
-  { amount: 60, unit: "seconds" },
-  { amount: 60, unit: "minutes" },
-  { amount: 24, unit: "hours" },
-  { amount: 7, unit: "days" },
-  { amount: 4.34524, unit: "weeks" },
-  { amount: 12, unit: "months" },
-  { amount: Number.POSITIVE_INFINITY, unit: "years" },
-];
+/** "Oct 12, 9:00 AM – 11:00 AM" for an event with a known end time. */
+export function formatDateRange(start: string | Date, end?: string | Date): string {
+  const startLabel = `${formatShortDate(start)}, ${formatTime(start)}`;
+  if (!end) return startLabel;
+  const endDate = toDate(end);
+  const startDate = toDate(start);
+  const sameDay = startDate.toDateString() === endDate.toDateString();
+  return sameDay
+    ? `${startLabel} – ${formatTime(endDate)}`
+    : `${startLabel} – ${formatShortDate(endDate)}, ${formatTime(endDate)}`;
+}
 
-/** e.g. "in 3 days", "2 hours ago". */
-export function formatRelativeTime(value: Date | string, now: Date = new Date()): string {
-  const rtf = new Intl.RelativeTimeFormat(DEFAULT_LOCALE, { numeric: "auto" });
-  let duration = (toDate(value).getTime() - now.getTime()) / 1000;
+/** "09:00" -> "9:00 AM". Anything that isn't a plain 24h clock string is returned untouched. */
+export function formatClockTime(value: string): string {
+  const match = /^(\d{1,2}):(\d{2})(?::\d{2})?$/.exec(value.trim());
+  if (!match) return value;
+  const hours = Number(match[1]);
+  const minutes = match[2];
+  if (hours > 23) return value;
+  const period = hours >= 12 ? 'PM' : 'AM';
+  return `${hours % 12 === 0 ? 12 : hours % 12}:${minutes} ${period}`;
+}
 
-  for (const division of RELATIVE_TIME_DIVISIONS) {
-    if (Math.abs(duration) < division.amount) {
-      return rtf.format(Math.round(duration), division.unit);
+export function isUpcoming(value: string | Date, now: Date = new Date()): boolean {
+  return toDate(value).getTime() >= now.getTime();
+}
+
+export function isPast(value: string | Date, now: Date = new Date()): boolean {
+  return !isUpcoming(value, now);
+}
+
+/**
+ * Next occurrence of a weekly recurring time (e.g. "next Sunday at 9:00 AM"),
+ * given a day-of-week (0=Sunday) and 24h "HH:mm". Used for service-time
+ * countdowns and JSON-LD when the backend models a recurring service instead
+ * of a one-off event.
+ */
+export function getNextWeekday(
+  dayOfWeek: number,
+  time: string,
+  from: Date = new Date()
+): Date {
+  const [hours, minutes] = time.split(':').map(Number);
+  const result = new Date(from);
+  result.setHours(hours, minutes, 0, 0);
+  const currentDay = result.getDay();
+  let diff = (dayOfWeek - currentDay + 7) % 7;
+  if (diff === 0 && result.getTime() <= from.getTime()) diff = 7;
+  result.setDate(result.getDate() + diff);
+  return result;
+}
+
+/** "in 3 days" / "2 hours ago" — coarse, human relative time. */
+export function relativeTime(value: string | Date, now: Date = new Date()): string {
+  const diffMs = toDate(value).getTime() - now.getTime();
+  const absMs = Math.abs(diffMs);
+  const future = diffMs >= 0;
+
+  const units: [Intl.RelativeTimeFormatUnit, number][] = [
+    ['year', DAY_MS * 365],
+    ['month', DAY_MS * 30],
+    ['week', DAY_MS * 7],
+    ['day', DAY_MS],
+    ['hour', 3_600_000],
+    ['minute', 60_000],
+  ];
+
+  for (const [unit, unitMs] of units) {
+    if (absMs >= unitMs) {
+      const amount = Math.round(absMs / unitMs);
+      const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+      return rtf.format(future ? amount : -amount, unit);
     }
-    duration /= division.amount;
   }
+  return future ? 'in a moment' : 'just now';
+}
 
-  return rtf.format(Math.round(duration), "years");
+export type CountdownParts = {
+  totalMs: number;
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  isPast: boolean;
+};
+
+/** Decompose the delta to `target` into calendar-friendly units. */
+export function getCountdownParts(target: string | Date, now: Date = new Date()): CountdownParts {
+  const totalMs = toDate(target).getTime() - now.getTime();
+  const isPastTarget = totalMs <= 0;
+  const abs = Math.abs(totalMs);
+  return {
+    totalMs,
+    days: Math.floor(abs / DAY_MS),
+    hours: Math.floor((abs % DAY_MS) / 3_600_000),
+    minutes: Math.floor((abs % 3_600_000) / 60_000),
+    seconds: Math.floor((abs % 60_000) / 1_000),
+    isPast: isPastTarget,
+  };
 }
