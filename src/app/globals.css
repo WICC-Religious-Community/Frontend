@@ -1,198 +1,355 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
-/* ---------------------------------------------------------------------- */
-/* Design tokens                                                          */
-/*                                                                        */
-/* Two-tier system:                                                      */
-/*   1. Primitive scales (--brand-*, --neutral-*) — perceptually even     */
-/*      OKLCH ramps that never change between light/dark.                */
-/*   2. Semantic tokens (--background, --primary, ...) — pick a step off */
-/*      the primitive scales for a given role, and get REMAPPED to a     */
-/*      different step in dark mode. Components should reference         */
-/*      semantic tokens (bg-primary, text-muted-foreground); reach for   */
-/*      the primitive scale (bg-brand-100, text-neutral-600) only for    */
-/*      one-off tints that don't map to a role.                          */
-/*                                                                        */
-/* The brand ramp is composed from Tailwind's own OKLCH orange/red        */
-/* scales via color-mix, so every step stays accessible and perceptually  */
-/* even without hand-guessing raw OKLCH numbers.                         */
-/* ---------------------------------------------------------------------- */
+/* =============================================================================
+   WICC — DESIGN TOKENS
+   The single source of truth for every design value in the app. One name per
+   value, four orthogonal groups: colour/surface, type scale, spacing rhythm,
+   radius. Components consume these through the Tailwind utilities generated in
+   the `@theme` block below — never raw hex, never a bare palette colour.
+   To rebrand WICC: edit the RAW PALETTE and (if needed) the semantic mappings.
+============================================================================= */
+
+/* Toggle dark mode with data-theme="dark" on <html>; default follows the OS. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
 :root {
-  --radius: 0.75rem;
+  /* --------------------------------------------------------------------- *
+   * RAW PALETTE — the only place literal colours are allowed.             *
+   * --------------------------------------------------------------------- */
+  --paper: #faf8f3;
+  --paper-2: #f2ede3;
+  --paper-3: #e7e0d2;
+  --white: #ffffff;
 
-  /* Primitive: brand (warm terracotta/ember) — orange + red blend. */
-  --brand-50: color-mix(in oklch, var(--color-orange-50) 65%, var(--color-red-50) 35%);
-  --brand-100: color-mix(in oklch, var(--color-orange-100) 65%, var(--color-red-100) 35%);
-  --brand-200: color-mix(in oklch, var(--color-orange-200) 65%, var(--color-red-200) 35%);
-  --brand-300: color-mix(in oklch, var(--color-orange-300) 65%, var(--color-red-300) 35%);
-  --brand-400: color-mix(in oklch, var(--color-orange-400) 65%, var(--color-red-400) 35%);
-  --brand-500: color-mix(in oklch, var(--color-orange-500) 65%, var(--color-red-500) 35%);
-  --brand-600: color-mix(in oklch, var(--color-orange-600) 65%, var(--color-red-600) 35%);
-  --brand-700: color-mix(in oklch, var(--color-orange-700) 65%, var(--color-red-700) 35%);
-  --brand-800: color-mix(in oklch, var(--color-orange-800) 65%, var(--color-red-800) 35%);
-  --brand-900: color-mix(in oklch, var(--color-orange-900) 65%, var(--color-red-900) 35%);
-  --brand-950: color-mix(in oklch, var(--color-orange-950) 65%, var(--color-red-950) 35%);
+  --midnight: #0b0f1a; /* near-black navy — ink & dark sections */
+  --midnight-2: #131826;
+  --midnight-3: #1d2333;
 
-  /* Primitive: neutral — Tailwind's warm "stone" scale, aliased so the whole */
-  /* app can be re-themed to a different neutral by editing only these lines. */
-  --neutral-50: var(--color-stone-50);
-  --neutral-100: var(--color-stone-100);
-  --neutral-200: var(--color-stone-200);
-  --neutral-300: var(--color-stone-300);
-  --neutral-400: var(--color-stone-400);
-  --neutral-500: var(--color-stone-500);
-  --neutral-600: var(--color-stone-600);
-  --neutral-700: var(--color-stone-700);
-  --neutral-800: var(--color-stone-800);
-  --neutral-900: var(--color-stone-900);
-  --neutral-950: var(--color-stone-950);
+  --gold: #b98a2e; /* WICC primary — warm, restrained ecclesiastical gold */
+  --gold-light: #d8ab4f;
+  --gold-dark: #8f6a1f;
 
-  /* Semantic — light theme */
-  --background: var(--neutral-50);
-  --foreground: var(--neutral-900);
+  --ink-900: #171410;
+  --ink-600: #5b554a; /* muted body text */
+  --ink-400: #8b8477; /* subtle / captions */
 
-  --card: var(--color-white);
-  --card-foreground: var(--neutral-900);
+  --line: rgba(23, 20, 16, 0.12);
+  --line-strong: rgba(23, 20, 16, 0.22);
 
-  --popover: var(--color-white);
-  --popover-foreground: var(--neutral-900);
+  --success: #2f9e5e;
+  --warning: #c98a1a;
+  --danger: #d0473f;
+  --info: #3f6fd0;
 
-  --primary: var(--brand-600);
-  --primary-foreground: var(--color-white);
+  /* --------------------------------------------------------------------- *
+   * SEMANTIC COLOUR — light theme. Every component references these.      *
+   * --------------------------------------------------------------------- */
+  --color-background: var(--paper);
+  --color-surface: var(--white);
+  --color-surface-sunken: var(--paper-2);
+  --color-surface-raised: var(--white);
+  --color-canvas: var(--paper);
+  --color-canvas-2: var(--paper-2);
 
-  --secondary: var(--neutral-100);
-  --secondary-foreground: var(--neutral-900);
+  --color-ink: var(--ink-900);
+  --color-muted: var(--ink-600);
+  --color-subtle: var(--ink-400);
+  --color-on-dark: #f4efe4;
+  --color-on-primary: #1b1405;
 
-  --muted: var(--neutral-100);
-  --muted-foreground: var(--neutral-500);
+  --color-border: var(--line);
+  --color-border-strong: var(--line-strong);
 
-  --accent: var(--neutral-100);
-  --accent-foreground: var(--neutral-900);
+  --color-primary: var(--gold);
+  --color-primary-light: var(--gold-light);
+  --color-primary-dark: var(--gold-dark);
+  --color-primary-tint: color-mix(in srgb, var(--gold) 12%, transparent);
+  --color-primary-tint-strong: color-mix(in srgb, var(--gold) 22%, transparent);
 
-  --destructive: var(--color-red-600);
-  --destructive-foreground: var(--color-white);
+  --color-dark: var(--midnight);
+  --color-dark-2: var(--midnight-2);
+  --color-dark-3: var(--midnight-3);
 
-  --success: var(--color-emerald-600);
-  --warning: var(--color-amber-500);
-  --info: var(--color-sky-600);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
 
-  --border: var(--neutral-200);
-  --input: var(--neutral-200);
-  --ring: var(--brand-600);
+  /* --------------------------------------------------------------------- *
+   * TYPE SCALE — fluid clamp(min, rem + vw, max). The rem floor keeps      *
+   * text responsive to browser zoom; the small vw term keeps growth       *
+   * gentle. Bridged to text-* utilities in @theme.                        *
+   * --------------------------------------------------------------------- */
+  --type-display-2xl: clamp(2.5rem, 1.9rem + 3vw, 4.25rem);
+  --type-display-xl: clamp(2.1rem, 1.65rem + 2.25vw, 3.4rem);
+  --type-display-lg: clamp(1.85rem, 1.55rem + 1.5vw, 2.75rem);
+  --type-display-md: clamp(1.55rem, 1.4rem + 0.9vw, 2.15rem);
+  --type-display-sm: clamp(1.35rem, 1.27rem + 0.45vw, 1.7rem);
+  --type-heading-lg: clamp(1.2rem, 1.12rem + 0.4vw, 1.5rem);
+  --type-heading-md: clamp(1.08rem, 1.03rem + 0.3vw, 1.3rem);
+  --type-heading-sm: clamp(1rem, 0.97rem + 0.2vw, 1.13rem);
+  --type-lead: clamp(1.05rem, 1rem + 0.35vw, 1.28rem);
+  --type-body-lg: clamp(1rem, 0.97rem + 0.15vw, 1.09rem);
+  --type-body: clamp(0.95rem, 0.93rem + 0.12vw, 1.02rem);
+  --type-body-sm: clamp(0.875rem, 0.86rem + 0.08vw, 0.94rem);
+  --type-label: clamp(0.8rem, 0.78rem + 0.06vw, 0.86rem);
+  --type-caption: clamp(0.75rem, 0.74rem + 0.05vw, 0.8rem);
+  --type-eyebrow: clamp(0.7rem, 0.68rem + 0.06vw, 0.76rem);
+
+  /* --------------------------------------------------------------------- *
+   * SPACING — section rhythm. Bridged to py-section* utilities.            *
+   * --------------------------------------------------------------------- */
+  --space-section-xs: clamp(2.5rem, 5vw, 4rem);
+  --space-section-sm: clamp(3.5rem, 7vw, 6.5rem);
+  --space-section: clamp(4.5rem, 9vw, 9rem);
+  --space-section-lg: clamp(6rem, 12vw, 12rem);
+  --page-gutter: clamp(1.25rem, 5vw, 2.5rem);
+  --container-max: 80rem;
+  --prose-max: 44rem;
+
+  /* --------------------------------------------------------------------- *
+   * RADIUS — one scale, semantic names.                                   *
+   * --------------------------------------------------------------------- */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
+  --radius-pill: 999px;
+
+  /* Third-party APIs that can't read CSS vars (maps, share images). */
+  --js-color-primary: #b98a2e;
+  --js-color-dark: #0b0f1a;
 }
 
+/* Explicit dark theme (opt-in via the toggle). */
+:root[data-theme='dark'] {
+  --color-background: var(--midnight);
+  --color-surface: var(--midnight-2);
+  --color-surface-sunken: #0e121d;
+  --color-surface-raised: var(--midnight-3);
+  --color-canvas: var(--midnight);
+  --color-canvas-2: var(--midnight-2);
+
+  --color-ink: #f4efe4;
+  --color-muted: #b8b1a2;
+  --color-subtle: #8a8375;
+
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-border-strong: rgba(255, 255, 255, 0.22);
+
+  --color-primary: var(--gold-light);
+  --color-primary-dark: var(--gold);
+}
+
+/* System dark preference, only when the user hasn't forced light. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: var(--neutral-950);
-    --foreground: var(--neutral-50);
+  :root:not([data-theme='light']) {
+    --color-background: var(--midnight);
+    --color-surface: var(--midnight-2);
+    --color-surface-sunken: #0e121d;
+    --color-surface-raised: var(--midnight-3);
+    --color-canvas: var(--midnight);
+    --color-canvas-2: var(--midnight-2);
 
-    --card: var(--neutral-900);
-    --card-foreground: var(--neutral-50);
+    --color-ink: #f4efe4;
+    --color-muted: #b8b1a2;
+    --color-subtle: #8a8375;
 
-    --popover: var(--neutral-900);
-    --popover-foreground: var(--neutral-50);
+    --color-border: rgba(255, 255, 255, 0.12);
+    --color-border-strong: rgba(255, 255, 255, 0.22);
 
-    --primary: var(--brand-400);
-    --primary-foreground: var(--neutral-950);
-
-    --secondary: var(--neutral-800);
-    --secondary-foreground: var(--neutral-50);
-
-    --muted: var(--neutral-800);
-    --muted-foreground: var(--neutral-400);
-
-    --accent: var(--neutral-800);
-    --accent-foreground: var(--neutral-50);
-
-    --destructive: var(--color-red-500);
-    --destructive-foreground: var(--neutral-950);
-
-    --success: var(--color-emerald-500);
-    --warning: var(--color-amber-400);
-    --info: var(--color-sky-500);
-
-    --border: var(--neutral-800);
-    --input: var(--neutral-800);
-    --ring: var(--brand-400);
+    --color-primary: var(--gold-light);
+    --color-primary-dark: var(--gold);
   }
 }
 
-/* Register tokens as Tailwind utilities: bg-background, text-primary, bg-brand-100, etc. */
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-info: var(--info);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-
-  --color-brand-50: var(--brand-50);
-  --color-brand-100: var(--brand-100);
-  --color-brand-200: var(--brand-200);
-  --color-brand-300: var(--brand-300);
-  --color-brand-400: var(--brand-400);
-  --color-brand-500: var(--brand-500);
-  --color-brand-600: var(--brand-600);
-  --color-brand-700: var(--brand-700);
-  --color-brand-800: var(--brand-800);
-  --color-brand-900: var(--brand-900);
-  --color-brand-950: var(--brand-950);
-
-  --color-neutral-50: var(--neutral-50);
-  --color-neutral-100: var(--neutral-100);
-  --color-neutral-200: var(--neutral-200);
-  --color-neutral-300: var(--neutral-300);
-  --color-neutral-400: var(--neutral-400);
-  --color-neutral-500: var(--neutral-500);
-  --color-neutral-600: var(--neutral-600);
-  --color-neutral-700: var(--neutral-700);
-  --color-neutral-800: var(--neutral-800);
-  --color-neutral-900: var(--neutral-900);
-  --color-neutral-950: var(--neutral-950);
-
-  --radius-sm: calc(var(--radius) - 0.375rem);
-  --radius-md: calc(var(--radius) - 0.125rem);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 0.25rem);
-
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-instrument-serif);
+/* .on-dark re-themes the semantic tokens to their dark values for any
+   deliberately dark section (hero, CTA band, feature panel), independent of
+   the page theme — so descendants and bare h*/p stay readable. */
+.on-dark {
+  --color-background: var(--midnight);
+  --color-surface: var(--midnight-2);
+  --color-surface-sunken: #0e121d;
+  --color-surface-raised: var(--midnight-3);
+  --color-canvas: var(--midnight);
+  --color-canvas-2: var(--midnight-2);
+  --color-ink: #f4efe4;
+  --color-muted: #b8b1a2;
+  --color-subtle: #948d7e;
+  --color-border: rgba(255, 255, 255, 0.14);
+  --color-border-strong: rgba(255, 255, 255, 0.26);
+  --color-primary: var(--gold-light);
+  --color-primary-dark: var(--gold);
+  color: var(--color-ink);
+  background-color: var(--color-background);
 }
 
+/* =============================================================================
+   THEME BRIDGE — maps the tokens above onto Tailwind utilities.
+   --color-* -> bg-/text-/border-*   --text-* -> text-*   --radius-* -> rounded-*
+============================================================================= */
+@theme inline {
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-surface-sunken: var(--color-surface-sunken);
+  --color-surface-raised: var(--color-surface-raised);
+  --color-canvas: var(--color-canvas);
+  --color-canvas-2: var(--color-canvas-2);
+  --color-ink: var(--color-ink);
+  --color-muted: var(--color-muted);
+  --color-subtle: var(--color-subtle);
+  --color-on-dark: var(--color-on-dark);
+  --color-on-primary: var(--color-on-primary);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-primary: var(--color-primary);
+  --color-primary-light: var(--color-primary-light);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-primary-tint: var(--color-primary-tint);
+  --color-primary-tint-strong: var(--color-primary-tint-strong);
+  --color-dark: var(--color-dark);
+  --color-dark-2: var(--color-dark-2);
+  --color-dark-3: var(--color-dark-3);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+  --color-info: var(--color-info);
+
+  --font-sans:
+    var(--font-body), ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-display:
+    var(--font-display-face), ui-serif, Georgia, Cambria, 'Times New Roman',
+    serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --text-display-2xl: var(--type-display-2xl);
+  --text-display-2xl--line-height: 1.02;
+  --text-display-2xl--letter-spacing: -0.03em;
+  --text-display-xl: var(--type-display-xl);
+  --text-display-xl--line-height: 1.05;
+  --text-display-xl--letter-spacing: -0.03em;
+  --text-display-lg: var(--type-display-lg);
+  --text-display-lg--line-height: 1.08;
+  --text-display-lg--letter-spacing: -0.025em;
+  --text-display-md: var(--type-display-md);
+  --text-display-md--line-height: 1.12;
+  --text-display-md--letter-spacing: -0.02em;
+  --text-display-sm: var(--type-display-sm);
+  --text-display-sm--line-height: 1.16;
+  --text-display-sm--letter-spacing: -0.015em;
+  --text-heading-lg: var(--type-heading-lg);
+  --text-heading-lg--line-height: 1.2;
+  --text-heading-md: var(--type-heading-md);
+  --text-heading-md--line-height: 1.25;
+  --text-heading-sm: var(--type-heading-sm);
+  --text-heading-sm--line-height: 1.3;
+  --text-lead: var(--type-lead);
+  --text-lead--line-height: 1.6;
+  --text-body-lg: var(--type-body-lg);
+  --text-body-lg--line-height: 1.7;
+  --text-body: var(--type-body);
+  --text-body--line-height: 1.7;
+  --text-body-sm: var(--type-body-sm);
+  --text-body-sm--line-height: 1.6;
+  --text-label: var(--type-label);
+  --text-label--line-height: 1.4;
+  --text-caption: var(--type-caption);
+  --text-caption--line-height: 1.4;
+  --text-eyebrow: var(--type-eyebrow);
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.2em;
+
+  --spacing-section-xs: var(--space-section-xs);
+  --spacing-section-sm: var(--space-section-sm);
+  --spacing-section: var(--space-section);
+  --spacing-section-lg: var(--space-section-lg);
+  --spacing-gutter: var(--page-gutter);
+
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-pill: var(--radius-pill);
+
+  --container-3xl: var(--container-max);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* =============================================================================
+   BASE LAYER
+============================================================================= */
 @layer base {
   * {
     border-color: var(--color-border);
   }
 
   html {
-    color-scheme: light dark;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   body {
+    background-color: var(--color-background);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--type-body);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    font-feature-settings: "cv11", "ss01";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    color: var(--color-ink);
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   ::selection {
-    background-color: color-mix(in oklab, var(--color-primary) 30%, transparent);
-    color: var(--color-foreground);
+    background: var(--color-primary-tint-strong);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+}
+
+@layer components {
+  /* The one eyebrow / kicker treatment. */
+  .eyebrow {
+    font-size: var(--type-eyebrow);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-primary-dark);
   }
 }
