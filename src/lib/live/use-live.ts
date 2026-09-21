@@ -53,7 +53,10 @@ export function useLiveTopic<T>(topic: string, options: UseLiveTopicOptions<T>):
 export function useLiveQuerySync<T>(topic: string, queryKey: QueryKey, enabled = true) {
   const queryClient = useQueryClient();
   const keyRef = useRef(queryKey);
-  keyRef.current = queryKey;
+
+  useEffect(() => {
+    keyRef.current = queryKey;
+  }, [queryKey]);
 
   useEffect(() => {
     if (!enabled || env.NEXT_PUBLIC_LIVE_TRANSPORT === 'poll') return;

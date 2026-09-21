@@ -10,7 +10,7 @@ import { readingTime, stripHtml } from '@/lib/format/string';
 import { routes } from '@/config/routes';
 
 export async function generateStaticParams() {
-  const slugs = await getAllBlogPostSlugs();
+  const slugs = await getAllBlogPostSlugs().catch(() => []);
   return slugs.map(slug => ({ slug }));
 }
 

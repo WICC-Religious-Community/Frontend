@@ -10,7 +10,7 @@ import { buildBreadcrumbSchema } from '@/lib/seo/jsonld';
 import { routes } from '@/config/routes';
 
 export async function generateStaticParams() {
-  const slugs = await getAllMinistrySlugs();
+  const slugs = await getAllMinistrySlugs().catch(() => []);
   return slugs.map(slug => ({ slug }));
 }
 

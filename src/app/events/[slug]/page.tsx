@@ -15,7 +15,7 @@ import { formatDateRange } from '@/lib/format/date';
 import { routes } from '@/config/routes';
 
 export async function generateStaticParams() {
-  const slugs = await getAllEventSlugs();
+  const slugs = await getAllEventSlugs().catch(() => []);
   return slugs.map(slug => ({ slug }));
 }
 

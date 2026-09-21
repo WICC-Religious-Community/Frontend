@@ -10,7 +10,7 @@ import { directionsUrl } from '@/lib/utils/directions';
 import { routes } from '@/config/routes';
 
 export async function generateStaticParams() {
-  const slugs = await getAllLocationSlugs();
+  const slugs = await getAllLocationSlugs().catch(() => []);
   return slugs.map(slug => ({ slug }));
 }
 

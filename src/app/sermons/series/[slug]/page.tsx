@@ -9,7 +9,7 @@ import { formatShortDate } from '@/lib/format/date';
 import { routes } from '@/config/routes';
 
 export async function generateStaticParams() {
-  const seriesList = await getSermonSeriesList();
+  const seriesList = await getSermonSeriesList().catch(() => []);
   return seriesList.map(series => ({ slug: series.slug }));
 }
 

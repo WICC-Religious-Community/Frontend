@@ -12,7 +12,7 @@ import { formatDate } from '@/lib/format/date';
 import { routes } from '@/config/routes';
 
 export async function generateStaticParams() {
-  const slugs = await getAllSermonSlugs();
+  const slugs = await getAllSermonSlugs().catch(() => []);
   return slugs.map(slug => ({ slug }));
 }
 

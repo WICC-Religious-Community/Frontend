@@ -30,7 +30,7 @@ export function BlockRenderer({ blocks }: { blocks: Block[] }) {
       {blocks.map((block, index) => {
         const Component = blockComponents[block.type];
         if (!Component) return null;
-        // eslint-disable-next-line react/no-array-index-key -- blocks have no stable id from the API
+        // blocks have no stable id from the API
         return <Component key={`${block.type}-${index}`} data={block.data} />;
       })}
     </>

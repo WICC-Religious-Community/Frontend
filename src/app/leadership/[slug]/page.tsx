@@ -8,7 +8,7 @@ import { buildPersonSchema } from '@/lib/seo/jsonld';
 import { routes } from '@/config/routes';
 
 export async function generateStaticParams() {
-  const slugs = await getAllLeaderSlugs();
+  const slugs = await getAllLeaderSlugs().catch(() => []);
   return slugs.map(slug => ({ slug }));
 }
 

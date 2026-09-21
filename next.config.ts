@@ -4,6 +4,13 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   poweredByHeader: false,
 
+  // `msw`'s Node interceptors monkey-patch `http.ClientRequest`/global fetch;
+  // left to automatic Server Components bundling, that patch can land in a
+  // different module instance than the one Next's runtime actually calls
+  // through, so only some server fetches get intercepted. Native `require`
+  // keeps it to one instance.
+  serverExternalPackages: ['msw', '@mswjs/interceptors'],
+
   images: {
     remotePatterns: [
       // The backend's media/CDN host — set NEXT_PUBLIC_API_URL's host here too

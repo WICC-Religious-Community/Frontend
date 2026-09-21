@@ -6,7 +6,7 @@ import { queryKeys } from '@/lib/api/query-keys';
 import { LiveTopic } from '@/lib/live/topics';
 import { useLiveTopic } from '@/lib/live/use-live';
 import type { Paginated } from '@/domain/pagination';
-import { toEventAvailability, toEventPage } from './mappers';
+import { toEventPage } from './mappers';
 import { seatsRemaining, type EventAvailability, type EventFilters, type EventItem } from './model';
 
 export function useEvents(filters: Omit<EventFilters, 'cursor'>, initialPage?: Paginated<EventItem>) {
