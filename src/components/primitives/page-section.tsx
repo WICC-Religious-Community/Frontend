@@ -20,7 +20,11 @@ export function Page({
   tone?: SectionTone;
   className?: string;
 }) {
-  return <main className={cn('min-h-screen', toneClass[tone], className)}>{children}</main>;
+  return (
+    <main id="main-content" className={cn('min-h-screen', toneClass[tone], className)}>
+      {children}
+    </main>
+  );
 }
 
 export const Section = forwardRef<

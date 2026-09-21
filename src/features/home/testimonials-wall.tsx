@@ -12,7 +12,7 @@ export function TestimonialsWall({ testimonials }: { testimonials: Testimonial[]
 
   return (
     <Container>
-      <SectionHeader eyebrow="Life Change" title="Stories from our church family" size="sm" align="center" />
+      <SectionHeader eyebrow="Testimonies" title="Testimonies" size="sm" align="center" />
       <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <AnimatePresence initial={false}>
           {items.slice(0, 6).map(testimonial => (

@@ -6,7 +6,7 @@ import { routes } from '@/config/routes';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Connect',
-  description: 'Take your next step at WICC — membership, connect groups, volunteering, and more.',
+  description: 'Get in touch and take your next step with WICC.',
   path: routes.connect(),
 });
 

@@ -34,7 +34,7 @@ export function NewsletterForm() {
     <Container width="narrow" className="text-center">
       <h2 className="font-display text-heading-lg font-semibold text-ink">Stay in the loop</h2>
       <p className="text-muted mt-2 text-body-sm">
-        Get sermon releases, event announcements, and church news in your inbox.
+        Subscribe to updates from WICC.
       </p>
       <form onSubmit={handleSubmit(onSubmit)} className="mx-auto mt-6 flex max-w-md gap-2" noValidate>
         <div className="flex-1">

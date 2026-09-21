@@ -25,9 +25,7 @@ export function SiteShell({
       </a>
       <AnnouncementBar announcement={settings.announcement} />
       <Header />
-      <main id="main-content" className="flex-1">
-        {children}
-      </main>
+      <div className="flex-1">{children}</div>
       <Footer settings={settings} legalLinks={legalLinks} />
     </>
   );

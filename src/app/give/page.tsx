@@ -8,7 +8,7 @@ import { routes } from '@/config/routes';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Give',
-  description: 'Support the ministry of WICC through tithes, offerings, and giving toward our building fund.',
+  description: 'Ways to give to WICC.',
   path: routes.give(),
   noindex: true,
 });
@@ -22,7 +22,6 @@ export default async function GivePage() {
         <SectionHeader
           eyebrow="Generosity"
           title="Give"
-          description="Your giving fuels everything from weekly services to community outreach and missions."
           size="lg"
         />
 

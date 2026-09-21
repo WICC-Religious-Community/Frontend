@@ -8,8 +8,7 @@ export function GivingCta() {
     <Container className="text-center">
       <SectionHeader
         eyebrow="Generosity"
-        title="Give with a grateful heart"
-        description="Your giving fuels everything from weekly services to community outreach and missions."
+        title="Give to WICC"
         size="md"
         align="center"
       />

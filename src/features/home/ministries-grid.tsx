@@ -10,7 +10,6 @@ export function MinistriesGrid({ ministries }: { ministries: Ministry[] }) {
       <SectionHeader
         eyebrow="Get Involved"
         title="Find your place"
-        description="Every ministry at WICC exists to help you grow and belong."
         size="sm"
         align="center"
       />

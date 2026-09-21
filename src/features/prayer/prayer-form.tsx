@@ -49,7 +49,7 @@ export function PrayerForm() {
       </Field>
       <label className="text-muted flex items-center gap-2 text-body-sm">
         <input type="checkbox" className="accent-primary h-4 w-4" {...register('isConfidential')} />
-        Keep this request confidential (shared only with the pastoral team)
+        Keep this request private
       </label>
       <Button type="submit" size="lg" disabled={isPending} className="w-full sm:w-auto">
         {isPending ? 'Sending…' : 'Submit Request'}

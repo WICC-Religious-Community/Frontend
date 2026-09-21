@@ -8,7 +8,7 @@ import { routes } from '@/config/routes';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Ministries',
-  description: 'Find your place at WICC — ministries for women, men, youth, children, and more.',
+  description: 'The ministries of WICC.',
   path: routes.ministries(),
 });
 
@@ -21,7 +21,6 @@ export default async function MinistriesPage() {
         <SectionHeader
           eyebrow="Get Involved"
           title="Ministries"
-          description="Every ministry at WICC exists to help you grow and belong."
           size="lg"
           align="center"
         />

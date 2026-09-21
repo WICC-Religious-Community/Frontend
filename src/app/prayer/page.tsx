@@ -6,7 +6,7 @@ import { routes } from '@/config/routes';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Prayer Request',
-  description: 'Submit a prayer request — our pastoral team is here to pray with you.',
+  description: 'Submit a prayer request to WICC.',
   path: routes.prayer(),
 });
 
@@ -15,9 +15,9 @@ export default function PrayerPage() {
     <Page>
       <Container className="py-section" width="narrow">
         <SectionHeader
-          eyebrow="We're Here For You"
+          eyebrow="Prayer"
           title="Prayer Request"
-          description="Whatever you're facing, you don't have to face it alone. Share your request below."
+          description="Share your request below."
           size="lg"
         />
         <div className="mt-12">

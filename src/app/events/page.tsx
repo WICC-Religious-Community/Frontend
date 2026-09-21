@@ -7,7 +7,7 @@ import { routes } from '@/config/routes';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Events',
-  description: 'See what’s happening at WICC — conferences, classes, outreach days, and more.',
+  description: 'Upcoming and past events at WICC.',
   path: routes.events(),
 });
 

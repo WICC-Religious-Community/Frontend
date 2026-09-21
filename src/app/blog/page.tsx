@@ -8,7 +8,7 @@ import { routes } from '@/config/routes';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Blog',
-  description: 'Devotionals and articles from the WICC team.',
+  description: 'Articles from WICC.',
   path: routes.blog(),
 });
 
