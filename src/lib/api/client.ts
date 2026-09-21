@@ -27,7 +27,7 @@ const throwOnError: Middleware = {
 
 /**
  * Attaches the server-only bearer token. Only imported from server code
- * (Server Actions, `domain/*/server.ts`) — never bundled into client JS
+ * (Server Actions, each domain's `server.ts`) — never bundled into client JS
  * because those files never import from a `'use client'` module graph.
  */
 function withAuth(): Middleware {

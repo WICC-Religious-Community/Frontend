@@ -26,7 +26,7 @@ export default async function AboutPage() {
             <div className="border-border h-full rounded-lg border p-8">
               <h2 className="font-display text-heading-md font-semibold text-ink">What We Believe</h2>
               <p className="text-muted mt-3 text-body-sm leading-relaxed">
-                Our core convictions — Scripture, salvation, the church, and the life we're called to live.
+                Our core convictions — Scripture, salvation, the church, and the life we&apos;re called to live.
               </p>
               <Button asChild variant="link" className="mt-4">
                 <Link href={routes.whatWeBelieve()}>Read our beliefs</Link>

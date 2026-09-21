@@ -23,7 +23,7 @@ export const prayerSchema = z.object({
   email: z.string().email('Enter a valid email address').optional().or(z.literal('')),
   phone: z.string().optional(),
   request: z.string().min(10, 'Share a little more about your request'),
-  isConfidential: z.boolean().default(false),
+  isConfidential: z.boolean(),
   company: z.string().max(0, 'Invalid submission').optional(),
 });
 export type PrayerInput = z.infer<typeof prayerSchema>;

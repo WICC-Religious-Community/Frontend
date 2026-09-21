@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Facebook, Instagram, Youtube, Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
+import { Facebook, Instagram, Youtube } from './social-icons';
 import { Logo } from './logo';
 import { Container } from '@/components/primitives';
 import { FOOTER_NAV, LEGAL_NAV, SITE } from '@/config/site';

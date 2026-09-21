@@ -60,8 +60,8 @@ export function NewsletterForm({ onSubscribe }: NewsletterFormProps) {
           </p>
         ) : null}
       </div>
-      <Button type="submit" isLoading={form.isSubmitting} className="w-fit">
-        Subscribe
+      <Button type="submit" className="w-fit" disabled={form.isSubmitting} aria-busy={form.isSubmitting}>
+        {form.isSubmitting ? "Subscribing..." : "Subscribe"}
       </Button>
       {status === "error" && errorMessage ? (
         <p role="alert" className="text-sm text-destructive">

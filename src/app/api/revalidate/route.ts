@@ -19,7 +19,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: '"tags" must be a string array' }, { status: 400 });
   }
 
-  for (const tag of tags as string[]) revalidateTag(tag);
+  // Called from outside a Server Action (an external webhook), so `updateTag`
+  // isn't available — expire immediately rather than serving stale content.
+  for (const tag of tags as string[]) revalidateTag(tag, { expire: 0 });
 
   return NextResponse.json({ revalidated: true, tags });
 }

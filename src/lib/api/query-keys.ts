@@ -1,5 +1,5 @@
 /**
- * Centralised TanStack Query keys. Every `domain/*/client.ts` hook builds its
+ * Centralised TanStack Query keys. Every domain's `client.ts` hook builds its
  * key here instead of inlining an array literal — keeps invalidation
  * (`queryClient.invalidateQueries`) and the live-sync layer (`lib/live`)
  * pointed at the exact same keys the components read.

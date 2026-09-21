@@ -74,8 +74,8 @@ export default async function VisitPage() {
           </div>
 
           <div>
-            <h2 className="font-display text-heading-md font-semibold text-ink">Let us know you're coming</h2>
-            <p className="text-muted mt-2 text-body-sm">We'll have a seat and a warm welcome ready for you.</p>
+            <h2 className="font-display text-heading-md font-semibold text-ink">Let us know you&apos;re coming</h2>
+            <p className="text-muted mt-2 text-body-sm">We&apos;ll have a seat and a warm welcome ready for you.</p>
             <div className="mt-6">
               <ConnectForm />
             </div>
