@@ -4,11 +4,15 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { subscribeToNewsletter } from "@/lib/content/newsletter";
 import { useForm } from "@/lib/forms/use-form";
 import { composeValidators, email as emailRule, required } from "@/lib/validation/rules";
 
-export function NewsletterForm() {
+export interface NewsletterFormProps {
+  /** Left to the consumer so this component stays free of any particular backend or API shape. */
+  onSubscribe: (email: string) => Promise<void>;
+}
+
+export function NewsletterForm({ onSubscribe }: NewsletterFormProps) {
   const [status, setStatus] = React.useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
@@ -21,7 +25,7 @@ export function NewsletterForm() {
       setStatus("idle");
       setErrorMessage(null);
       try {
-        await subscribeToNewsletter(values.email);
+        await onSubscribe(values.email);
         setStatus("success");
       } catch (error) {
         setStatus("error");
