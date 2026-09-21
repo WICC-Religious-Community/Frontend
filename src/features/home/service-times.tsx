@@ -1,5 +1,6 @@
 import { Clock, MapPin } from 'lucide-react';
 import { Container, Reveal, SectionHeader } from '@/components/primitives';
+import { formatClockTime } from '@/lib/format/date';
 import type { ServiceTime } from '@/domain/site/model';
 
 export function ServiceTimes({
@@ -20,8 +21,8 @@ export function ServiceTimes({
               <div>
                 <p className="font-display text-heading-sm font-semibold text-ink">{service.label}</p>
                 <p className="text-muted mt-1 text-body-sm">
-                  {service.dayOfWeek.join(' & ')} · {service.opens}
-                  {service.closes ? `–${service.closes}` : ''}
+                  {service.dayOfWeek.join(' & ')} · {formatClockTime(service.opens)}
+                  {service.closes ? `–${formatClockTime(service.closes)}` : ''}
                   {service.timezone ? ` ${service.timezone}` : ''}
                 </p>
               </div>

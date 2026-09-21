@@ -9,7 +9,7 @@ import { routes } from '@/config/routes';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'About',
-  description: 'Learn about WICC — our story, our beliefs, and the family you can belong to.',
+  description: 'About WICC.',
   path: routes.about(),
 });
 
@@ -19,14 +19,14 @@ export default async function AboutPage() {
   return (
     <Page>
       <Container className="py-section">
-        <SectionHeader eyebrow="Our Story" title="About WICC" description={settings.description} size="lg" />
+        <SectionHeader eyebrow="About" title="About WICC" description={settings.description} size="lg" />
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2">
           <Reveal>
             <div className="border-border h-full rounded-lg border p-8">
               <h2 className="font-display text-heading-md font-semibold text-ink">What We Believe</h2>
               <p className="text-muted mt-3 text-body-sm leading-relaxed">
-                Our core convictions — Scripture, salvation, the church, and the life we&apos;re called to live.
+                What WICC believes.
               </p>
               <Button asChild variant="link" className="mt-4">
                 <Link href={routes.whatWeBelieve()}>Read our beliefs</Link>
@@ -37,7 +37,7 @@ export default async function AboutPage() {
             <div className="border-border h-full rounded-lg border p-8">
               <h2 className="font-display text-heading-md font-semibold text-ink">Leadership</h2>
               <p className="text-muted mt-3 text-body-sm leading-relaxed">
-                Meet the pastors and leaders who shepherd our church family.
+                The people who lead WICC.
               </p>
               <Button asChild variant="link" className="mt-4">
                 <Link href={routes.leadership()}>Meet our leaders</Link>

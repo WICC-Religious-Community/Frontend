@@ -31,12 +31,15 @@ export function LiveServiceBadge({ initial }: { initial: ServiceStatus }) {
     );
   }
 
+  const hasCountdown = countdown && !countdown.isPast;
+  if (!hasCountdown && !status.label) return null;
+
   return (
     <div className="text-subtle inline-flex items-center gap-2 rounded-full border border-border-strong px-4 py-1.5 text-label font-semibold">
       <Radio className="h-3.5 w-3.5" aria-hidden="true" />
-      {countdown && !countdown.isPast
+      {hasCountdown
         ? `Next service in ${countdown.days > 0 ? `${countdown.days}d ` : ''}${countdown.hours}h ${countdown.minutes}m`
-        : (status.label ?? 'Join us Sunday')}
+        : status.label}
     </div>
   );
 }

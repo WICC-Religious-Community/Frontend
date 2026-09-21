@@ -56,6 +56,17 @@ export function formatDateRange(start: string | Date, end?: string | Date): stri
     : `${startLabel} – ${formatShortDate(endDate)}, ${formatTime(endDate)}`;
 }
 
+/** "09:00" -> "9:00 AM". Anything that isn't a plain 24h clock string is returned untouched. */
+export function formatClockTime(value: string): string {
+  const match = /^(\d{1,2}):(\d{2})(?::\d{2})?$/.exec(value.trim());
+  if (!match) return value;
+  const hours = Number(match[1]);
+  const minutes = match[2];
+  if (hours > 23) return value;
+  const period = hours >= 12 ? 'PM' : 'AM';
+  return `${hours % 12 === 0 ? 12 : hours % 12}:${minutes} ${period}`;
+}
+
 export function isUpcoming(value: string | Date, now: Date = new Date()): boolean {
   return toDate(value).getTime() >= now.getTime();
 }
