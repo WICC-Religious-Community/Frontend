@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE, SOCIAL_LINKS } from "@/config/site";
+import { LEGAL_NAV, SITE } from "@/config/site";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildOrganizationSchema } from "@/lib/seo/jsonld";
-import { getSiteSettings } from "@/domain/site/server";
-import type { SiteSettings } from "@/domain/site/model";
+import { getSiteSettings, MINIMAL_SETTINGS } from "@/domain/site/server";
+import { getPage } from "@/domain/pages/server";
 import { QueryProvider } from "@/lib/query/provider";
-import { MockingProvider } from "@/lib/query/mocking-provider";
-import { AnnouncementBar } from "@/components/layout/announcement-bar";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { SiteShell } from "@/components/layout/site-shell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,16 +28,18 @@ export const metadata: Metadata = {
   description: SITE.description,
 };
 
-/** Used only if the backend is unreachable when the layout renders — keeps the shell up. */
-const FALLBACK_SITE_SETTINGS: SiteSettings = {
-  name: SITE.name,
-  description: SITE.description,
-  socialLinks: SOCIAL_LINKS,
-  serviceTimes: [],
-};
-
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const settings = await getSiteSettings().catch(() => FALLBACK_SITE_SETTINGS);
+  // The shell is shared by every page (including error pages), so a settings
+  // outage degrades the chrome to just the church's name instead of taking
+  // the whole site down. The failure is still logged.
+  const settings = await getSiteSettings().catch(error => {
+    console.error('Failed to load site settings', error);
+    return MINIMAL_SETTINGS;
+  });
+  // Legal links only appear once the church has actually published those pages.
+  const legalLinks = (
+    await Promise.all(LEGAL_NAV.map(async item => ((await getPage(item.href.slice(1))) ? item : null)))
+  ).filter((item): item is (typeof LEGAL_NAV)[number] => item !== null);
   const organizationSchema = buildOrganizationSchema({
     name: settings.name,
     description: settings.description,
@@ -65,12 +64,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="min-h-full flex flex-col">
         <JsonLd data={organizationSchema} />
         <QueryProvider>
-          <MockingProvider>
-            <AnnouncementBar announcement={settings.announcement} />
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer settings={settings} />
-          </MockingProvider>
+          <SiteShell settings={settings} legalLinks={legalLinks}>
+            {children}
+          </SiteShell>
         </QueryProvider>
       </body>
     </html>

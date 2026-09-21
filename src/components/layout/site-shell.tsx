@@ -1,11 +1,20 @@
 import { AnnouncementBar } from './announcement-bar';
 import { Header } from './header';
 import { Footer } from './footer';
+import type { NavItem } from '@/config/site';
 import type { SiteSettings } from '@/domain/site/model';
 import type { ReactNode } from 'react';
 
 /** The chrome every marketing page shares — one place to change header/footer for the whole site. */
-export function SiteShell({ settings, children }: { settings: SiteSettings; children: ReactNode }) {
+export function SiteShell({
+  settings,
+  legalLinks,
+  children,
+}: {
+  settings: SiteSettings;
+  legalLinks: NavItem[];
+  children: ReactNode;
+}) {
   return (
     <>
       <a
@@ -16,8 +25,10 @@ export function SiteShell({ settings, children }: { settings: SiteSettings; chil
       </a>
       <AnnouncementBar announcement={settings.announcement} />
       <Header />
-      <div id="main-content">{children}</div>
-      <Footer settings={settings} />
+      <main id="main-content" className="flex-1">
+        {children}
+      </main>
+      <Footer settings={settings} legalLinks={legalLinks} />
     </>
   );
 }

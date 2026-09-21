@@ -1,14 +1,16 @@
 import createClient, { type Middleware } from 'openapi-fetch';
-import { env } from '@/config/env';
+import { env, isApiConfigured } from '@/config/env';
 import { ApiError } from './errors';
 import type { paths } from './schema';
 
 /**
- * The one HTTP boundary in the app. Every request — server or client, mock or
- * live — goes through this `openapi-fetch` instance, so every path/param/
- * response shape is checked against `schema.d.ts` at compile time. In mock
- * mode (`NEXT_PUBLIC_API_MODE=mock`) MSW intercepts the underlying `fetch`
- * (see `src/test/msw`), so this file never branches on mode itself.
+ * The one HTTP boundary in the app. Every request goes through this
+ * `openapi-fetch` instance, so every path/param/response shape is checked
+ * against `schema.d.ts` (generated from `openapi.yaml`) at compile time.
+ *
+ * There is no mock mode. With `NEXT_PUBLIC_API_URL` unset the server-side
+ * fetchers in `domain/*` short-circuit via `lib/api/fallback.ts` and never
+ * reach this client.
  */
 const throwOnError: Middleware = {
   async onResponse({ response }) {
@@ -41,14 +43,14 @@ function withAuth(): Middleware {
   };
 }
 
-export const apiClient = createClient<paths>({
-  baseUrl: `${env.NEXT_PUBLIC_API_URL}/v1`,
-});
+const baseUrl = isApiConfigured ? `${env.NEXT_PUBLIC_API_URL}/v1` : 'http://api-not-configured.invalid/v1';
+
+export const apiClient = createClient<paths>({ baseUrl });
 apiClient.use(throwOnError);
 
 /** Server-only client — carries the bearer token for authenticated writes. */
 export function createServerApiClient() {
-  const client = createClient<paths>({ baseUrl: `${env.NEXT_PUBLIC_API_URL}/v1` });
+  const client = createClient<paths>({ baseUrl });
   client.use(withAuth());
   client.use(throwOnError);
   return client;

@@ -451,6 +451,32 @@ export interface components {
                 text?: string;
                 href?: string;
             };
+            hero?: components["schemas"]["Hero"];
+            /** @description Short statements of what the church is about, authored by the church. */
+            pillars?: components["schemas"]["Pillar"][];
+        };
+        Cta: {
+            label: string;
+            href: string;
+        };
+        /** @description Homepage hero, authored by the church. Every field is optional. */
+        Hero: {
+            headline?: string;
+            subheadline?: string;
+            media?: {
+                /** @enum {string} */
+                kind: "image" | "video";
+                url: string;
+                /** @description Still frame shown before/instead of video. */
+                posterUrl?: string;
+                alt?: string;
+            };
+            primaryCta?: components["schemas"]["Cta"];
+            secondaryCta?: components["schemas"]["Cta"];
+        };
+        Pillar: {
+            title: string;
+            description?: string;
         };
         ServiceStatus: {
             isLive: boolean;

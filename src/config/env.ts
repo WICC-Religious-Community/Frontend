@@ -13,9 +13,8 @@ export const env = createEnv({
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   },
   client: {
-    NEXT_PUBLIC_SITE_URL: z.string().url().default('https://wicc.org'),
-    NEXT_PUBLIC_API_URL: z.string().url().default('https://api.wicc.org'),
-    NEXT_PUBLIC_API_MODE: z.enum(['mock', 'live']).default('mock'),
+    NEXT_PUBLIC_SITE_URL: z.string().url().default('http://localhost:3000'),
+    NEXT_PUBLIC_API_URL: z.string().url().optional(),
     NEXT_PUBLIC_LIVE_TRANSPORT: z.enum(['sse', 'poll']).default('sse'),
     NEXT_PUBLIC_GOOGLE_MAPS_BROWSER_API_KEY: z.string().optional(),
     NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().optional(),
@@ -26,16 +25,16 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-    NEXT_PUBLIC_API_MODE: process.env.NEXT_PUBLIC_API_MODE,
     NEXT_PUBLIC_LIVE_TRANSPORT: process.env.NEXT_PUBLIC_LIVE_TRANSPORT,
     NEXT_PUBLIC_GOOGLE_MAPS_BROWSER_API_KEY:
       process.env.NEXT_PUBLIC_GOOGLE_MAPS_BROWSER_API_KEY,
     NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
   },
   emptyStringAsUndefined: true,
-  // The mock-first workflow (see README) must work without any .env file at
-  // all — CI, a fresh clone, and `npm run build` before the backend exists.
+  // A fresh clone with no .env must still build and run: with no API URL the
+  // site renders honest empty states rather than failing.
   skipValidation: process.env.CI === 'true' || process.env.SKIP_ENV_VALIDATION === '1',
 });
 
-export const isMockMode = env.NEXT_PUBLIC_API_MODE === 'mock';
+/** `false` until `NEXT_PUBLIC_API_URL` is set — data fetchers return empty results instead of calling out. */
+export const isApiConfigured = Boolean(env.NEXT_PUBLIC_API_URL);

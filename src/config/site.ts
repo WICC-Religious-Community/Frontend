@@ -10,9 +10,8 @@
 export const SITE = {
   name: 'WICC',
   legalName: 'WICC',
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://wicc.org',
-  description:
-    'WICC is a church family built on grace, faith, and purpose — join us for worship, teaching, and community.',
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000',
+  description: 'The official website of WICC.',
   locale: 'en_US',
 } as const;
 
@@ -80,12 +79,3 @@ export const LEGAL_NAV: NavItem[] = [
   { label: 'Terms of Use', href: '/terms' },
 ];
 
-/** Fallback socials — the API's `siteSettings` resource can override these. */
-export const SOCIAL_LINKS = {
-  facebook: 'https://www.facebook.com/wiccchurch',
-  instagram: 'https://www.instagram.com/wiccchurch',
-  youtube: 'https://www.youtube.com/@wiccchurch',
-  tiktok: 'https://www.tiktok.com/@wiccchurch',
-  x: 'https://x.com/wiccchurch',
-  whatsapp: undefined as string | undefined,
-} as const;

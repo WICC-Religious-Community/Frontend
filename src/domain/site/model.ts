@@ -29,6 +29,31 @@ export interface Announcement {
   href?: string;
 }
 
+export interface Cta {
+  label: string;
+  href: string;
+}
+
+export interface HeroMedia {
+  kind: 'image' | 'video';
+  url: string;
+  posterUrl?: string;
+  alt?: string;
+}
+
+export interface Hero {
+  headline?: string;
+  subheadline?: string;
+  media?: HeroMedia;
+  primaryCta?: Cta;
+  secondaryCta?: Cta;
+}
+
+export interface Pillar {
+  title: string;
+  description?: string;
+}
+
 export interface SiteSettings {
   name: string;
   description?: string;
@@ -39,6 +64,8 @@ export interface SiteSettings {
   socialLinks: SocialLinks;
   serviceTimes: ServiceTime[];
   announcement?: Announcement;
+  hero?: Hero;
+  pillars: Pillar[];
 }
 
 export interface ServiceStatus {

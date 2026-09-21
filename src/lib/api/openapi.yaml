@@ -401,6 +401,42 @@ components:
             enabled: { type: boolean }
             text: { type: string }
             href: { type: string }
+        hero: { $ref: '#/components/schemas/Hero' }
+        pillars:
+          type: array
+          description: Short statements of what the church is about, authored by the church.
+          items: { $ref: '#/components/schemas/Pillar' }
+
+    Cta:
+      type: object
+      required: [label, href]
+      properties:
+        label: { type: string }
+        href: { type: string }
+
+    Hero:
+      type: object
+      description: Homepage hero, authored by the church. Every field is optional.
+      properties:
+        headline: { type: string }
+        subheadline: { type: string }
+        media:
+          type: object
+          required: [kind, url]
+          properties:
+            kind: { type: string, enum: [image, video] }
+            url: { type: string }
+            posterUrl: { type: string, description: Still frame shown before/instead of video. }
+            alt: { type: string }
+        primaryCta: { $ref: '#/components/schemas/Cta' }
+        secondaryCta: { $ref: '#/components/schemas/Cta' }
+
+    Pillar:
+      type: object
+      required: [title]
+      properties:
+        title: { type: string }
+        description: { type: string }
 
     ServiceStatus:
       type: object

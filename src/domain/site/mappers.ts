@@ -15,6 +15,23 @@ const serviceTimeSchema = z.object({
   timezone: z.string().optional(),
 });
 
+const ctaSchema = z.object({ label: z.string(), href: z.string() });
+
+const heroSchema = z.object({
+  headline: z.string().optional(),
+  subheadline: z.string().optional(),
+  media: z
+    .object({
+      kind: z.enum(['image', 'video']),
+      url: z.string(),
+      posterUrl: z.string().optional(),
+      alt: z.string().optional(),
+    })
+    .optional(),
+  primaryCta: ctaSchema.optional(),
+  secondaryCta: ctaSchema.optional(),
+});
+
 const siteSettingsSchema = z.object({
   name: z.string(),
   description: z.string().optional(),
@@ -44,6 +61,8 @@ const siteSettingsSchema = z.object({
   announcement: z
     .object({ enabled: z.boolean(), text: z.string(), href: z.string().optional() })
     .optional(),
+  hero: heroSchema.optional(),
+  pillars: z.array(z.object({ title: z.string(), description: z.string().optional() })).default([]),
 });
 
 export function toSiteSettings(dto: unknown): SiteSettings {

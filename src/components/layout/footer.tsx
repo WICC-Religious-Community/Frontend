@@ -3,12 +3,12 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 import { Facebook, Instagram, Youtube } from './social-icons';
 import { Logo } from './logo';
 import { Container } from '@/components/primitives';
-import { FOOTER_NAV, LEGAL_NAV, SITE } from '@/config/site';
+import { FOOTER_NAV, SITE, type NavItem } from '@/config/site';
 import type { SiteSettings } from '@/domain/site/model';
 
 const socialIcons = { facebook: Facebook, instagram: Instagram, youtube: Youtube } as const;
 
-export function Footer({ settings }: { settings: SiteSettings }) {
+export function Footer({ settings, legalLinks }: { settings: SiteSettings; legalLinks: NavItem[] }) {
   const year = new Date().getFullYear();
 
   return (
@@ -82,7 +82,7 @@ export function Footer({ settings }: { settings: SiteSettings }) {
             © {year} {SITE.name}. All rights reserved.
           </p>
           <div className="flex gap-5">
-            {LEGAL_NAV.map(item => (
+            {legalLinks.map(item => (
               <Link key={item.href} href={item.href} className="hover:text-on-dark transition-colors">
                 {item.label}
               </Link>

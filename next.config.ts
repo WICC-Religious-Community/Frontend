@@ -1,25 +1,19 @@
 import type { NextConfig } from 'next';
 
+const mediaHosts = (process.env.NEXT_PUBLIC_MEDIA_HOSTS ?? '')
+  .split(',')
+  .map(host => host.trim())
+  .filter(Boolean);
+
 const nextConfig: NextConfig = {
   output: 'standalone',
   poweredByHeader: false,
 
-  // `msw`'s Node interceptors monkey-patch `http.ClientRequest`/global fetch;
-  // left to automatic Server Components bundling, that patch can land in a
-  // different module instance than the one Next's runtime actually calls
-  // through, so only some server fetches get intercepted. Native `require`
-  // keeps it to one instance.
-  serverExternalPackages: ['msw', '@mswjs/interceptors'],
-
   images: {
     remotePatterns: [
-      // The backend's media/CDN host — set NEXT_PUBLIC_API_URL's host here too
-      // once it's known; wildcarded for now so any subdomain works in staging.
-      { protocol: 'https', hostname: '**.wicc.org', pathname: '/**' },
       { protocol: 'https', hostname: '*.ytimg.com', pathname: '/**' },
-      { protocol: 'https', hostname: '**.amazonaws.com', pathname: '/**' },
-      { protocol: 'https', hostname: '**.supabase.co', pathname: '/**' },
-      { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
+      // Media/CDN hosts are deployment-specific: NEXT_PUBLIC_MEDIA_HOSTS="cdn.example.org,img.example.org"
+      ...mediaHosts.map(hostname => ({ protocol: 'https' as const, hostname, pathname: '/**' })),
     ],
     formats: ['image/webp', 'image/avif'],
   },
