@@ -24,7 +24,7 @@ export function PageMasthead({
     <div className={cn('border-border flex flex-wrap items-end justify-between gap-6 border-b pb-8', className)}>
       <div>
         {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-        <h1 className={cn('font-display text-display-md sm:text-display-lg font-semibold text-ink text-balance', eyebrow && 'mt-4')}>
+        <h1 className={cn('font-display text-display-md sm:text-display-lg uppercase text-ink text-balance', eyebrow && 'mt-4')}>
           {title}
         </h1>
         {description ? <p className="text-muted mt-4 max-w-xl text-body-lg text-pretty">{description}</p> : null}

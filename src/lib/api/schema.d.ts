@@ -462,6 +462,7 @@ export interface components {
         /** @description Homepage hero, authored by the church. Every field is optional. */
         Hero: {
             headline?: string;
+            headlineAccent?: string;
             subheadline?: string;
             media?: {
                 /** @enum {string} */

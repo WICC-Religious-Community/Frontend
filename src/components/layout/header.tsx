@@ -1,8 +1,4 @@
-'use client';
-
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useSyncExternalStore } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Logo } from './logo';
 import { MobileNav } from './mobile-nav';
@@ -10,38 +6,13 @@ import { Container } from '@/components/primitives';
 import { Button } from '@/components/ui/button';
 import { MAIN_NAV } from '@/config/site';
 import { routes } from '@/config/routes';
-import { cn } from '@/lib/utils/cn';
 
-const SCROLL_THRESHOLD = 24;
-
-function subscribeToScroll(onChange: () => void) {
-  window.addEventListener('scroll', onChange, { passive: true });
-  return () => window.removeEventListener('scroll', onChange);
-}
-
-/**
- * Sticky site header. On the homepage it floats transparent over the hero
- * (the hero pulls itself up underneath) and turns solid once the page
- * scrolls; on every other route it is solid from the start.
- */
+/** Sticky site header — permanently dark, on every page and at every scroll position, matching the reference. */
 export function Header() {
-  const pathname = usePathname();
-  const scrolled = useSyncExternalStore(
-    subscribeToScroll,
-    () => window.scrollY > SCROLL_THRESHOLD,
-    () => false
-  );
-  const overlay = pathname === routes.home() && !scrolled;
-
   return (
-    <header
-      className={cn(
-        'sticky top-0 z-40 border-b transition-colors duration-300',
-        overlay ? 'on-dark border-transparent bg-transparent' : 'border-border bg-surface/95 backdrop-blur'
-      )}
-    >
+    <header className="on-dark bg-dark sticky top-0 z-40 border-b border-white/10">
       <Container className="flex h-18 items-center justify-between gap-6">
-        <Logo dark={overlay} />
+        <Logo dark />
 
         <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
           {MAIN_NAV.map(group =>
@@ -49,7 +20,7 @@ export function Header() {
               <Link
                 key={group.label}
                 href={group.href}
-                className="text-muted hover:text-ink hover:bg-white/10 rounded-md px-3 py-2 text-body-sm font-medium transition-colors"
+                className="text-muted hover:text-on-dark rounded-full px-3 py-2 text-label font-semibold uppercase tracking-wide transition-colors hover:bg-white/10"
               >
                 {group.label}
               </Link>
@@ -57,7 +28,7 @@ export function Header() {
               <div key={group.label} className="group relative">
                 <button
                   type="button"
-                  className="text-muted hover:text-ink flex items-center gap-1 rounded-md px-3 py-2 text-body-sm font-medium transition-colors hover:bg-white/10"
+                  className="text-muted hover:text-on-dark flex items-center gap-1 rounded-full px-3 py-2 text-label font-semibold uppercase tracking-wide transition-colors hover:bg-white/10"
                 >
                   {group.label}
                   <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
@@ -78,7 +49,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex">
+          <Button asChild variant="outline" size="sm" className="hidden border-white/30 text-on-dark hover:bg-white/10 sm:inline-flex">
             <Link href={routes.visit()}>Plan a Visit</Link>
           </Button>
           <Button asChild size="sm">

@@ -6,7 +6,7 @@ export function ScriptureQuoteBlock({ data }: { data: Record<string, unknown> })
 
   return (
     <Container className="py-section-sm text-center" width="narrow">
-      <blockquote className="font-display text-heading-lg italic text-ink">“{text}”</blockquote>
+      <blockquote className="font-display text-heading-lg text-ink">“{text}”</blockquote>
       {reference ? <p className="text-primary-dark mt-4 text-body-sm font-semibold">{reference}</p> : null}
     </Container>
   );

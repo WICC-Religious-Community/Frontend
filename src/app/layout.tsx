@@ -10,8 +10,9 @@ import { QueryProvider } from "@/lib/query/provider";
 import { SiteShell } from "@/components/layout/site-shell";
 
 // Self-hosted (latin subset) so builds and dev never depend on reaching
-// Google Fonts. DM Sans for everything, DM Serif Display for headings — a
-// pairing designed as a pair (same foundry release), not a guessed mashup.
+// Google Fonts. DM Sans for everything; Anton — an ultra-bold condensed
+// display face — for headlines, matching the reference direction: huge,
+// heavy, poster-like statement type, not a delicate serif.
 const body = localFont({
   src: "./fonts/DMSans-Variable.woff2",
   variable: "--font-body",
@@ -20,11 +21,9 @@ const body = localFont({
 });
 
 const display = localFont({
-  src: [
-    { path: "./fonts/DMSerifDisplay-Regular.woff2", weight: "400", style: "normal" },
-    { path: "./fonts/DMSerifDisplay-Italic.woff2", weight: "400", style: "italic" },
-  ],
+  src: "./fonts/Anton-Regular.woff2",
   variable: "--font-display-face",
+  weight: "400",
   display: "swap",
 });
 

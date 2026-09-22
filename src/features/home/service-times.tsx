@@ -17,7 +17,7 @@ export function ServiceTimes({ serviceTimes, address }: { serviceTimes: ServiceT
         <Reveal>
           <Eyebrow>Join Us</Eyebrow>
           <p className="font-display text-display-md mt-4 font-semibold text-ink text-balance">
-            Every week, <span className="text-primary-dark italic">in person</span> and online.
+            Every week, <span className="text-primary">in person</span> and online.
           </p>
           {address ? (
             <>

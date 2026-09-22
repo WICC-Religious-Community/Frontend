@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils/cn';
 import { Slot } from '@/lib/utils/slot';
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-body-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-body-sm font-semibold uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -12,7 +12,7 @@ export const buttonVariants = cva(
         dark: 'bg-dark text-on-dark hover:bg-dark-2',
         outline: 'border border-border-strong bg-transparent text-ink hover:bg-canvas-2',
         ghost: 'bg-transparent text-ink hover:bg-canvas-2',
-        link: 'bg-transparent p-0 text-primary-dark underline underline-offset-4 hover:text-primary',
+        link: 'bg-transparent p-0 text-primary-dark normal-case tracking-normal underline underline-offset-4 hover:text-primary',
       },
       size: {
         default: 'h-11 px-6',

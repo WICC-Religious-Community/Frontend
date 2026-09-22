@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Container, IndexList, Page, PageMasthead } from '@/components/primitives';
+import { Container, FeatureTiles, Page, PageMasthead } from '@/components/primitives';
 import { getLocations } from '@/domain/locations/server';
 import { buildPageMetadata } from '@/lib/seo/metadata';
 import { formatClockTime } from '@/lib/format/date';
@@ -19,21 +19,23 @@ export default async function LocationsPage() {
       <Container className="py-section">
         <PageMasthead eyebrow="Find Us" title="Locations" />
         <div className="mt-10">
-          <IndexList
-            items={locations.map(location => ({
-              id: location.id,
-              href: routes.location(location.slug),
-              title: location.name,
-              meta: (
-                <>
-                  {location.address ? `${location.address.streetAddress}, ${location.address.locality}` : null}
-                  {location.address && location.serviceTimes[0] ? ' · ' : null}
-                  {location.serviceTimes[0]
-                    ? `${location.serviceTimes[0].label} · ${formatClockTime(location.serviceTimes[0].opens)}`
-                    : null}
-                </>
-              ),
-            }))}
+          <FeatureTiles
+            featureFirst
+            items={locations.map(location => {
+              const parts = [
+                location.address ? `${location.address.streetAddress}, ${location.address.locality}` : null,
+                location.serviceTimes[0]
+                  ? `${location.serviceTimes[0].label} · ${formatClockTime(location.serviceTimes[0].opens)}`
+                  : null,
+              ].filter(Boolean);
+              return {
+                id: location.id,
+                href: routes.location(location.slug),
+                title: location.name,
+                summary: parts.length > 0 ? parts.join(' — ') : undefined,
+                imageUrl: location.coverUrl,
+              };
+            })}
           />
         </div>
       </Container>

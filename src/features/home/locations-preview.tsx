@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { Container, Eyebrow, IndexList } from '@/components/primitives';
+import { Container, Eyebrow, FeatureTiles } from '@/components/primitives';
 import { routes } from '@/config/routes';
 import type { Location } from '@/domain/locations/model';
 
@@ -19,12 +19,13 @@ export function LocationsPreview({ locations }: { locations: Location[] }) {
         </Link>
       </div>
       <div className="mt-8">
-        <IndexList
+        <FeatureTiles
           items={locations.map(location => ({
             id: location.id,
             href: routes.location(location.slug),
             title: location.name,
-            meta: location.address ? `${location.address.streetAddress}, ${location.address.locality}` : undefined,
+            summary: location.address ? `${location.address.streetAddress}, ${location.address.locality}` : undefined,
+            imageUrl: location.coverUrl,
           }))}
         />
       </div>

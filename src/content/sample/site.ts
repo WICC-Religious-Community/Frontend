@@ -20,7 +20,8 @@ export const sampleSiteSettings: SiteSettings = {
     { label: 'Midweek Service', dayOfWeek: ['Wednesday'], opens: '18:00', closes: '19:30' },
   ],
   hero: {
-    headline: `Welcome to ${SITE.name}`,
+    headline: 'We Envision a People',
+    headlineAccent: 'Celebrating Life in Christ',
     subheadline: 'A community built on faith, belonging, and purpose.',
     media: {
       kind: 'video',

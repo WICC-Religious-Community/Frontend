@@ -19,6 +19,7 @@ const ctaSchema = z.object({ label: z.string(), href: z.string() });
 
 const heroSchema = z.object({
   headline: z.string().optional(),
+  headlineAccent: z.string().optional(),
   subheadline: z.string().optional(),
   media: z
     .object({
