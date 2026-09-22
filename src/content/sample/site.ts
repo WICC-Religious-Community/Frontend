@@ -1,5 +1,6 @@
 import { SITE } from '@/config/site';
 import type { ServiceStatus, SiteSettings } from '@/domain/site/model';
+import { SAMPLE_HERO_VIDEO_URL, unsplash } from './media';
 
 /** Placeholder — see `src/content/sample/README.md`. Not real WICC information. */
 export const sampleSiteSettings: SiteSettings = {
@@ -21,6 +22,12 @@ export const sampleSiteSettings: SiteSettings = {
   hero: {
     headline: `Welcome to ${SITE.name}`,
     subheadline: 'A community built on faith, belonging, and purpose.',
+    media: {
+      kind: 'video',
+      url: SAMPLE_HERO_VIDEO_URL,
+      posterUrl: unsplash('1507692049790-de58290a4334', 1600),
+      alt: '',
+    },
     primaryCta: { label: 'Watch', href: '/watch' },
     secondaryCta: { label: 'Plan a Visit', href: '/visit' },
   },

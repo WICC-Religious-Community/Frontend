@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '*.ytimg.com', pathname: '/**' },
+      // Sample-content imagery only (src/content/sample/) — safe to keep even
+      // in production since it's unreachable once a real API is configured.
+      { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
       // Media/CDN hosts are deployment-specific: NEXT_PUBLIC_MEDIA_HOSTS="cdn.example.org,img.example.org"
       ...mediaHosts.map(hostname => ({ protocol: 'https' as const, hostname, pathname: '/**' })),
     ],
