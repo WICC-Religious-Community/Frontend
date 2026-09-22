@@ -10,19 +10,19 @@ import { QueryProvider } from "@/lib/query/provider";
 import { SiteShell } from "@/components/layout/site-shell";
 
 // Self-hosted (latin subset) so builds and dev never depend on reaching
-// Google Fonts. The variable names are the ones `globals.css` reads: a warm
-// display serif for headings, a grotesk sans for everything else.
+// Google Fonts. DM Sans for everything, DM Serif Display for headings — a
+// pairing designed as a pair (same foundry release), not a guessed mashup.
 const body = localFont({
-  src: "./fonts/Inter-Variable.woff2",
+  src: "./fonts/DMSans-Variable.woff2",
   variable: "--font-body",
-  weight: "100 900",
+  weight: "400 700",
   display: "swap",
 });
 
 const display = localFont({
   src: [
-    { path: "./fonts/Fraunces-Variable.woff2", weight: "400 700", style: "normal" },
-    { path: "./fonts/Fraunces-Italic-Variable.woff2", weight: "400 700", style: "italic" },
+    { path: "./fonts/DMSerifDisplay-Regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/DMSerifDisplay-Italic.woff2", weight: "400", style: "italic" },
   ],
   variable: "--font-display-face",
   display: "swap",
