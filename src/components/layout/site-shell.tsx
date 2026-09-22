@@ -1,6 +1,8 @@
 import { AnnouncementBar } from './announcement-bar';
 import { Header } from './header';
 import { Footer } from './footer';
+import { PreviewBanner } from './preview-banner';
+import { isApiConfigured } from '@/config/env';
 import type { NavItem } from '@/config/site';
 import type { SiteSettings } from '@/domain/site/model';
 import type { ReactNode } from 'react';
@@ -23,6 +25,7 @@ export function SiteShell({
       >
         Skip to content
       </a>
+      {!isApiConfigured ? <PreviewBanner /> : null}
       <AnnouncementBar announcement={settings.announcement} />
       <Header />
       <div className="flex-1">{children}</div>
