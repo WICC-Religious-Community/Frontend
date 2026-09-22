@@ -37,11 +37,11 @@ export default async function LeaderDetailPage({ params }: { params: Promise<{ s
     <Page>
       <Container className="py-section">
         <Breadcrumbs items={[{ label: 'Leadership', href: routes.leadership() }, { label: leader.name }]} />
-        <div className="mt-8 grid gap-10 sm:grid-cols-[16rem_1fr]">
+        <div className="mt-8 grid gap-10 sm:grid-cols-[18rem_1fr]">
           <Figure src={leader.photoUrl} alt={leader.name} width={400} height={500} className="aspect-[4/5]" />
-          <div>
-            <h1 className="font-display text-display-sm font-semibold text-ink">{leader.name}</h1>
-            {leader.role ? <p className="text-primary-dark mt-2 text-body-lg font-medium">{leader.role}</p> : null}
+          <div className="self-center">
+            <h1 className="font-display text-display-md font-semibold text-ink text-balance">{leader.name}</h1>
+            {leader.role ? <p className="text-primary-dark mt-3 text-body-lg font-medium">{leader.role}</p> : null}
             {leader.bio ? <p className="text-muted mt-6 max-w-2xl text-body-lg leading-loose">{leader.bio}</p> : null}
           </div>
         </div>

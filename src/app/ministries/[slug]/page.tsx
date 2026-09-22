@@ -40,26 +40,26 @@ export default async function MinistryDetailPage({ params }: { params: Promise<{
       <Figure src={ministry.coverUrl} alt={ministry.name} width={1600} height={600} className="aspect-[16/6] rounded-none" />
       <Container className="py-section">
         <Breadcrumbs items={[{ label: 'Ministries', href: routes.ministries() }, { label: ministry.name }]} />
-        <h1 className="font-display mt-4 text-display-sm font-semibold text-ink">{ministry.name}</h1>
-        {ministry.summary ? <p className="text-muted mt-3 max-w-2xl text-body-lg">{ministry.summary}</p> : null}
+        <h1 className="font-display mt-6 text-display-md font-semibold text-ink text-balance">{ministry.name}</h1>
+        {ministry.summary ? <p className="text-muted mt-4 max-w-2xl text-body-lg">{ministry.summary}</p> : null}
 
-        <div className="mt-8 grid gap-10 lg:grid-cols-[2fr_1fr]">
+        <div className="mt-12 grid gap-12 lg:grid-cols-[2fr_1fr]">
           {ministry.descriptionHtml ? (
             <Prose dangerouslySetInnerHTML={{ __html: ministry.descriptionHtml }} />
           ) : (
             <div />
           )}
-          <aside className="border-border h-fit space-y-4 rounded-lg border p-6">
+          <aside className="border-border h-fit space-y-5 border-t pt-8 lg:border-t-0 lg:border-l lg:pl-8 lg:pt-0">
             {ministry.meetingSchedule ? (
               <div>
                 <p className="text-subtle text-label font-semibold uppercase tracking-wide">Meets</p>
-                <p className="mt-1 text-body-sm text-ink">{ministry.meetingSchedule}</p>
+                <p className="mt-1.5 text-body-sm text-ink">{ministry.meetingSchedule}</p>
               </div>
             ) : null}
             {ministry.leader ? (
               <div>
                 <p className="text-subtle text-label font-semibold uppercase tracking-wide">Leader</p>
-                <p className="mt-1 text-body-sm text-ink">{ministry.leader.name}</p>
+                <p className="mt-1.5 text-body-sm text-ink">{ministry.leader.name}</p>
               </div>
             ) : null}
             <Button asChild className="w-full">

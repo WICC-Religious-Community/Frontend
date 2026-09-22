@@ -1,40 +1,62 @@
-import { Clock, MapPin } from 'lucide-react';
-import { Container, Reveal, SectionHeader } from '@/components/primitives';
+import Link from 'next/link';
+import { ArrowUpRight, MapPin } from 'lucide-react';
+import { Container, Eyebrow, Reveal, Split } from '@/components/primitives';
 import { formatClockTime } from '@/lib/format/date';
-import type { ServiceTime } from '@/domain/site/model';
+import { directionsUrl } from '@/lib/utils/directions';
+import type { Address, ServiceTime } from '@/domain/site/model';
 
-export function ServiceTimes({
-  serviceTimes,
-  venue,
-}: {
-  serviceTimes: ServiceTime[];
-  venue?: string;
-}) {
+/**
+ * A two-up editorial split rather than a grid of matching cards: a big
+ * standalone display statement on one side, the actual times listed like a
+ * program schedule on the other.
+ */
+export function ServiceTimes({ serviceTimes, address }: { serviceTimes: ServiceTime[]; address?: Address }) {
   return (
     <Container>
-      <SectionHeader eyebrow="Join Us" title="Service Times" size="sm" align="center" />
-      <div className="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-2">
-        {serviceTimes.map((service, index) => (
-          <Reveal key={service.label} delay={index * 0.05}>
-            <div className="border-border bg-surface flex items-start gap-4 rounded-lg border p-6">
-              <Clock className="text-primary-dark mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
-              <div>
-                <p className="font-display text-heading-sm font-semibold text-ink">{service.label}</p>
-                <p className="text-muted mt-1 text-body-sm">
-                  {service.dayOfWeek.join(' & ')} · {formatClockTime(service.opens)}
-                  {service.closes ? `–${formatClockTime(service.closes)}` : ''}
-                  {service.timezone ? ` ${service.timezone}` : ''}
+      <Split>
+        <Reveal>
+          <Eyebrow>Join Us</Eyebrow>
+          <p className="font-display text-display-md mt-4 font-semibold text-ink text-balance">
+            Every week, <span className="text-primary-dark italic">in person</span> and online.
+          </p>
+          {address ? (
+            <>
+              <p className="text-muted mt-6 flex items-center gap-2 text-body-sm">
+                <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" /> {address.streetAddress},{' '}
+                {address.locality}
+              </p>
+              <Link
+                href={directionsUrl(address)}
+                target="_blank"
+                rel="noreferrer"
+                className="text-primary-dark hover:text-primary mt-3 inline-flex items-center gap-1.5 text-body-sm font-semibold transition-colors"
+              >
+                Get directions <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </>
+          ) : null}
+        </Reveal>
+
+        <Reveal delay={0.08}>
+          <ol className="border-border divide-border divide-y border-y">
+            {serviceTimes.map(service => (
+              <li key={service.label} className="flex items-baseline justify-between gap-4 py-5">
+                <div>
+                  <p className="font-display text-heading-md font-semibold text-ink">{service.label}</p>
+                  <p className="text-subtle mt-1 text-body-sm">{service.dayOfWeek.join(' & ')}</p>
+                </div>
+                <p className="text-primary-dark shrink-0 text-body-lg font-semibold tabular-nums">
+                  {formatClockTime(service.opens)}
+                  {service.closes ? (
+                    <span className="text-muted font-normal"> – {formatClockTime(service.closes)}</span>
+                  ) : null}
+                  {service.timezone ? <span className="text-subtle font-normal"> {service.timezone}</span> : null}
                 </p>
-              </div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-      {venue ? (
-        <p className="text-muted mt-8 flex items-center justify-center gap-2 text-body-sm">
-          <MapPin className="h-4 w-4" aria-hidden="true" /> {venue}
-        </p>
-      ) : null}
+              </li>
+            ))}
+          </ol>
+        </Reveal>
+      </Split>
     </Container>
   );
 }

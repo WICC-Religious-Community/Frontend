@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Container, Grid, Page, SectionHeader } from '@/components/primitives';
+import { Container, EmptyState, Grid, Page, PageMasthead } from '@/components/primitives';
 import { AccountCard } from '@/features/giving/account-card';
 import { CampaignProgress } from '@/features/giving/campaign-progress';
 import { getGivingAccounts, getGivingCampaigns } from '@/domain/giving/server';
@@ -19,27 +19,27 @@ export default async function GivePage() {
   return (
     <Page>
       <Container className="py-section" width="narrow">
-        <SectionHeader
-          eyebrow="Generosity"
-          title="Give"
-          size="lg"
-        />
+        <PageMasthead eyebrow="Generosity" title="Give" />
 
         {campaigns.length > 0 ? (
-          <div className="mt-10 space-y-6">
+          <div className="mt-10 space-y-8">
             {campaigns.map(campaign => (
               <CampaignProgress key={campaign.id} campaign={campaign} />
             ))}
           </div>
         ) : null}
 
-        <div className="mt-12">
-          <h2 className="font-display text-heading-md font-semibold text-ink">Bank Transfer</h2>
-          <Grid columns={2} className="mt-6">
-            {accounts.map(account => (
-              <AccountCard key={account.id} account={account} />
-            ))}
-          </Grid>
+        <div className="mt-14">
+          <h2 className="font-display text-heading-lg font-semibold text-ink">Bank Transfer</h2>
+          {accounts.length > 0 ? (
+            <Grid columns={2} className="mt-6">
+              {accounts.map(account => (
+                <AccountCard key={account.id} account={account} />
+              ))}
+            </Grid>
+          ) : (
+            <EmptyState className="mt-6" title="No accounts published yet" />
+          )}
         </div>
       </Container>
     </Page>

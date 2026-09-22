@@ -3,9 +3,9 @@
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { Container } from '@/components/primitives';
-import { Button } from '@/components/ui/button';
+import { Container, Eyebrow, Split } from '@/components/primitives';
 import { subscribeToNewsletter } from '@/lib/actions/forms';
 import { newsletterSchema, type NewsletterInput } from '@/lib/validations';
 
@@ -31,29 +31,39 @@ export function NewsletterForm() {
   };
 
   return (
-    <Container width="narrow" className="text-center">
-      <h2 className="font-display text-heading-lg font-semibold text-ink">Stay in the loop</h2>
-      <p className="text-muted mt-2 text-body-sm">
-        Subscribe to updates from WICC.
-      </p>
-      <form onSubmit={handleSubmit(onSubmit)} className="mx-auto mt-6 flex max-w-md gap-2" noValidate>
-        <div className="flex-1">
-          <label htmlFor="newsletter-email" className="sr-only">
-            Email address
-          </label>
-          <input
-            id="newsletter-email"
-            type="email"
-            placeholder="you@example.com"
-            className="border-border-strong h-11 w-full rounded-md border bg-transparent px-4 text-body-sm outline-none focus:border-primary"
-            {...register('email')}
-          />
-          {errors.email ? <p className="text-danger mt-1.5 text-left text-caption">{errors.email.message}</p> : null}
+    <Container>
+      <Split className="lg:items-start">
+        <div>
+          <Eyebrow>Stay Connected</Eyebrow>
+          <p className="font-display text-display-sm mt-4 max-w-md font-semibold text-ink text-balance">
+            Subscribe to updates from WICC
+          </p>
         </div>
-        <Button type="submit" disabled={isPending}>
-          {isPending ? 'Subscribing…' : 'Subscribe'}
-        </Button>
-      </form>
+
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <div className="border-border-strong focus-within:border-primary flex items-center border-b pb-3">
+            <label htmlFor="newsletter-email" className="sr-only">
+              Email address
+            </label>
+            <input
+              id="newsletter-email"
+              type="email"
+              placeholder="you@example.com"
+              className="w-full bg-transparent text-body-lg text-ink outline-none placeholder:text-subtle"
+              {...register('email')}
+            />
+            <button
+              type="submit"
+              disabled={isPending}
+              aria-label="Subscribe"
+              className="text-ink hover:text-primary-dark shrink-0 transition-colors disabled:opacity-50"
+            >
+              <ArrowRight className="h-5 w-5" />
+            </button>
+          </div>
+          {errors.email ? <p className="text-danger mt-2 text-caption">{errors.email.message}</p> : null}
+        </form>
+      </Split>
     </Container>
   );
 }

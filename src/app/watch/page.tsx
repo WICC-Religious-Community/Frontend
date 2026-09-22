@@ -1,12 +1,10 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { Play } from 'lucide-react';
-import { Container, Figure, Grid, Page, SectionHeader } from '@/components/primitives';
+import { Container, Grid, Page, PageMasthead } from '@/components/primitives';
 import { WatchLive } from '@/features/watch/watch-live';
+import { SermonCard } from '@/features/sermons/sermon-card';
 import { getServiceStatus } from '@/domain/site/server';
 import { getSermons } from '@/domain/sermons/server';
 import { buildPageMetadata } from '@/lib/seo/metadata';
-import { formatShortDate } from '@/lib/format/date';
 import { routes } from '@/config/routes';
 
 export const metadata: Metadata = buildPageMetadata({
@@ -21,30 +19,21 @@ export default async function WatchPage() {
   return (
     <Page>
       <Container className="py-section">
-        <SectionHeader eyebrow="Join Us" title="Watch Live" size="lg" align="center" />
-        <div className="mx-auto mt-10 max-w-4xl">
+        <PageMasthead eyebrow="Join Us" title="Watch Live" />
+        <div className="mt-10">
           <WatchLive initial={status} />
         </div>
 
-        <div className="mt-16">
-          <h2 className="font-display text-heading-md font-semibold text-ink">Recent Messages</h2>
-          <Grid columns={3} className="mt-6">
-            {recent.map(sermon => (
-              <Link key={sermon.id} href={routes.sermon(sermon.slug)} className="group block">
-                <Figure src={sermon.thumbnailUrl} alt={sermon.title} width={480} height={270} className="aspect-video" />
-                <div className="mt-4 flex items-start justify-between gap-3">
-                  <div>
-                    <p className="font-display line-clamp-2 text-heading-sm font-semibold text-ink">{sermon.title}</p>
-                    <p className="text-subtle mt-1 text-caption">{formatShortDate(sermon.publishedAt)}</p>
-                  </div>
-                  <span className="bg-primary text-on-primary flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
-                    <Play className="h-3.5 w-3.5 fill-current" />
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </Grid>
-        </div>
+        {recent.length > 0 ? (
+          <div className="border-border mt-16 border-t pt-16">
+            <h2 className="font-display text-heading-lg font-semibold text-ink">Recent Messages</h2>
+            <Grid columns={3} className="mt-8">
+              {recent.map(sermon => (
+                <SermonCard key={sermon.id} sermon={sermon} />
+              ))}
+            </Grid>
+          </div>
+        ) : null}
       </Container>
     </Page>
   );

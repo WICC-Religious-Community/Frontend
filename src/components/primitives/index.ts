@@ -11,3 +11,8 @@ export { Breadcrumbs } from './breadcrumbs';
 export type { BreadcrumbItem } from './breadcrumbs';
 export { LoadMore } from './load-more';
 export { Stat } from './stat';
+export { PageMasthead } from './masthead';
+export { FeatureTiles } from './feature-tiles';
+export type { FeatureTileItem } from './feature-tiles';
+export { IndexList } from './index-list';
+export type { IndexListItem } from './index-list';

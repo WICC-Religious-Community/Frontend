@@ -1,16 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
-import { CalendarDays, MapPin } from 'lucide-react';
 import { useEvents } from '@/domain/events/client';
 import type { Paginated } from '@/domain/pagination';
 import type { EventItem } from '@/domain/events/model';
-import { EmptyState, Figure, Grid, LoadMore } from '@/components/primitives';
-import { EventAvailabilityBadge } from '@/features/home/event-availability-badge';
-import { formatDateRange } from '@/lib/format/date';
+import { EmptyState, Grid, LoadMore } from '@/components/primitives';
+import { EventCard } from './event-card';
 import { cn } from '@/lib/utils/cn';
-import { routes } from '@/config/routes';
 
 const VIEWS = [
   { value: 'upcoming', label: 'Upcoming' },
@@ -48,26 +44,7 @@ export function EventList({ initialPage }: { initialPage: Paginated<EventItem> }
       ) : (
         <Grid columns={3} className="mt-10">
           {events.map(event => (
-            <Link key={event.id} href={routes.event(event.slug)} className="border-border block h-full rounded-lg border p-6">
-              <Figure src={event.coverUrl} alt={event.title} width={480} height={270} className="aspect-video" />
-              <p className="text-primary-dark mt-4 flex items-center gap-2 text-caption font-semibold">
-                <CalendarDays className="h-3.5 w-3.5" /> {formatDateRange(event.startAt, event.endAt)}
-              </p>
-              <h3 className="font-display mt-2 text-heading-sm font-semibold text-ink">{event.title}</h3>
-              {event.locationName ? (
-                <p className="text-subtle mt-1 flex items-center gap-1.5 text-caption">
-                  <MapPin className="h-3.5 w-3.5" /> {event.locationName}
-                </p>
-              ) : null}
-              {event.capacity != null ? (
-                <div className="mt-4">
-                  <EventAvailabilityBadge
-                    eventId={event.id}
-                    initial={{ eventId: event.id, capacity: event.capacity, seatsTaken: event.seatsTaken ?? 0 }}
-                  />
-                </div>
-              ) : null}
-            </Link>
+            <EventCard key={event.id} event={event} />
           ))}
         </Grid>
       )}

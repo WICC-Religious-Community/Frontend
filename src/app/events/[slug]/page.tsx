@@ -44,24 +44,24 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
     <Page>
       <Container className="py-section">
         <Breadcrumbs items={[{ label: 'Events', href: routes.events() }, { label: event.title }]} />
-        <div className="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
+        <div className="mt-6 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
           <div>
             <Figure src={event.coverUrl} alt={event.title} width={800} height={450} className="aspect-video" />
-            <h1 className="font-display mt-6 text-display-sm font-semibold text-ink">{event.title}</h1>
-            <div className="text-muted mt-3 flex flex-wrap gap-4 text-body-sm">
+            <h1 className="font-display mt-6 text-display-md font-semibold text-ink text-balance">{event.title}</h1>
+            <div className="text-muted mt-4 flex flex-wrap gap-x-5 gap-y-2 text-body-sm">
               <span className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4" /> {formatDateRange(event.startAt, event.endAt)}
+                <CalendarDays className="h-4 w-4" aria-hidden="true" /> {formatDateRange(event.startAt, event.endAt)}
               </span>
               {event.locationName ? (
                 <span className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4" /> {event.locationName}
+                  <MapPin className="h-4 w-4" aria-hidden="true" /> {event.locationName}
                 </span>
               ) : null}
             </div>
-            {event.description ? <p className="text-ink mt-6 text-body-lg leading-loose">{event.description}</p> : null}
+            {event.description ? <p className="text-ink mt-8 text-body-lg leading-loose">{event.description}</p> : null}
           </div>
 
-          <aside className="border-border h-fit space-y-6 rounded-lg border p-6">
+          <aside className="border-border h-fit space-y-6 border-t pt-8 lg:border-t-0 lg:border-l lg:pl-8 lg:pt-0">
             <EventCountdown startAt={event.startAt} />
             {event.capacity != null ? (
               <EventAvailabilityBadge

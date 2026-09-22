@@ -41,15 +41,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <Page>
       <Container className="py-section" width="narrow">
         <Breadcrumbs items={[{ label: 'Blog', href: routes.blog() }, { label: post.title }]} />
-        <h1 className="font-display mt-4 text-display-sm font-semibold text-ink">{post.title}</h1>
-        <p className="text-subtle mt-3 text-body-sm">
+        <h1 className="font-display mt-6 text-display-md font-semibold text-ink text-balance">{post.title}</h1>
+        <p className="text-subtle mt-4 text-body-sm">
           {post.authorName ? `${post.authorName} · ` : ''}
           {formatDate(post.publishedAt)} · {readingTime(stripHtml(post.contentHtml ?? ''))} min read
         </p>
         {post.coverUrl ? (
-          <Figure src={post.coverUrl} alt={post.title} width={900} height={500} className="mt-8 aspect-[16/9]" />
+          <Figure src={post.coverUrl} alt={post.title} width={900} height={500} className="mt-10 aspect-[16/9]" />
         ) : null}
-        {post.contentHtml ? <Prose className="mt-8" dangerouslySetInnerHTML={{ __html: post.contentHtml }} /> : null}
+        {post.contentHtml ? <Prose className="mt-10" dangerouslySetInnerHTML={{ __html: post.contentHtml }} /> : null}
       </Container>
 
       <JsonLd

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Clock, MapPin, Navigation2 } from 'lucide-react';
 import Link from 'next/link';
 import { BlockRenderer } from '@/components/blocks/block-renderer';
-import { Container, Page, SectionHeader } from '@/components/primitives';
+import { Container, Page, PageMasthead } from '@/components/primitives';
 import { Button } from '@/components/ui/button';
 import { ConnectForm } from '@/features/connect/connect-form';
 import { getPage } from '@/domain/pages/server';
@@ -27,18 +27,14 @@ export default async function VisitPage() {
   return (
     <Page>
       <Container className="py-section">
-        <SectionHeader
-          eyebrow="Visit"
-          title="Plan Your Visit"
-          size="lg"
-        />
+        <PageMasthead eyebrow="Visit" title="Plan Your Visit" />
 
-        <div className="mt-16 grid gap-10 lg:grid-cols-2">
-          <div className="border-border rounded-lg border p-8">
+        <div className="mt-12 grid gap-12 lg:grid-cols-2">
+          <div>
             <p className="text-subtle flex items-center gap-2 text-label font-semibold uppercase tracking-wide">
-              <Clock className="h-4 w-4" /> Service Times
+              <Clock className="h-4 w-4" aria-hidden="true" /> Service Times
             </p>
-            <ul className="mt-3 space-y-2 text-body-sm text-ink">
+            <ul className="mt-4 space-y-2.5 text-body text-ink">
               {settings.serviceTimes.map(service => (
                 <li key={service.label}>
                   {service.label} — {service.dayOfWeek.join(' & ')}, {formatClockTime(service.opens)}
@@ -48,20 +44,20 @@ export default async function VisitPage() {
             </ul>
             {settings.address ? (
               <>
-                <p className="text-ink mt-6 flex items-start gap-2 text-body-sm">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
+                <p className="text-ink mt-8 flex items-start gap-2 text-body-sm">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                   {settings.address.streetAddress}, {settings.address.locality}
                 </p>
                 <Button asChild variant="outline" className="mt-4">
                   <Link href={directionsUrl(settings.address)} target="_blank" rel="noreferrer">
-                    <Navigation2 className="h-4 w-4" /> Get Directions
+                    <Navigation2 className="h-4 w-4" aria-hidden="true" /> Get Directions
                   </Link>
                 </Button>
               </>
             ) : null}
           </div>
 
-          <div>
+          <div className="border-border border-t pt-8 lg:border-t-0 lg:border-l lg:pl-12 lg:pt-0">
             <h2 className="font-display text-heading-md font-semibold text-ink">Let us know you&apos;re coming</h2>
             <div className="mt-6">
               <ConnectForm />

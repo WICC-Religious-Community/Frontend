@@ -45,7 +45,7 @@ export default async function HomePage() {
     settings.pillars.length > 0 && { key: 'pillars', node: <Pillars pillars={settings.pillars} /> },
     settings.serviceTimes.length > 0 && {
       key: 'service-times',
-      node: <ServiceTimes serviceTimes={settings.serviceTimes} venue={settings.address?.streetAddress} />,
+      node: <ServiceTimes serviceTimes={settings.serviceTimes} address={settings.address} />,
     },
     sermonPage.items.length > 0 && { key: 'sermons', node: <SermonSpotlight sermons={sermonPage.items} /> },
     eventPage.items.length > 0 && { key: 'events', node: <EventsStrip events={eventPage.items} /> },
