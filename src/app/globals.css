@@ -422,4 +422,20 @@ html[data-theme='dark'] * {
       display: none;
     }
   }
+
+  /* A slow, one-time zoom-out on the hero background — the classic "Ken
+     Burns" cue that separates a considered cinematic hero from a static
+     photo dropped in as a backdrop. The site-wide reduced-motion rule above
+     already collapses this to 0.01ms, so no separate override is needed. */
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1.08);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  .hero-ken-burns {
+    animation: hero-zoom 20s var(--ease-out-soft) forwards;
+  }
 }

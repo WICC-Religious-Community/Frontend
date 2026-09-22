@@ -16,7 +16,7 @@ export function HeroMedia({ media }: { media: HeroMediaModel }) {
   const still = media.kind === 'video' ? media.posterUrl : media.url;
 
   return (
-    <div className="absolute inset-0 -z-20" aria-hidden={media.alt ? undefined : true}>
+    <div className="hero-ken-burns absolute inset-0 -z-20" aria-hidden={media.alt ? undefined : true}>
       {playVideo ? (
         <video
           className="h-full w-full object-cover"

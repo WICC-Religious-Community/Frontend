@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { motion, useReducedMotion, type Variants } from 'motion/react';
 import { Play } from 'lucide-react';
 import { Container } from '@/components/primitives';
 import { Button } from '@/components/ui/button';
@@ -8,6 +11,22 @@ import type { ServiceStatus, SiteSettings } from '@/domain/site/model';
 import { HeroMedia } from './hero-media';
 import { HeroServiceBar } from './hero-service-bar';
 
+const container: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.14, delayChildren: 0.15 } },
+};
+
+const rise: Variants = {
+  hidden: { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+};
+
+/** The headline gets its own, slightly grander entrance — a soft blur resolving into focus as it rises. */
+const headlineRise: Variants = {
+  hidden: { opacity: 0, y: 28, filter: 'blur(10px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
+};
+
 /**
  * Homepage hero. The church supplies the words and the media
  * (`settings.hero`); with none published it falls back to a typographic
@@ -15,9 +34,12 @@ import { HeroServiceBar } from './hero-service-bar';
  * gradient. Centered, oversized, uppercase display type with an accent-color
  * second line — the one deliberate "statement" moment on the page. Pulls
  * itself up under the header (see `components/layout/header.tsx`), which
- * starts transparent here and only solidifies on scroll.
+ * starts transparent here and only solidifies on scroll. Content reveals in
+ * a staggered cascade (badge → headline → subhead → CTAs) rather than
+ * everything fading in as one block.
  */
 export function Hero({ settings, serviceStatus }: { settings: SiteSettings; serviceStatus: ServiceStatus }) {
+  const reduceMotion = useReducedMotion();
   const { hero } = settings;
   const headline = hero?.headline ?? settings.name;
   const subheadline = hero?.subheadline ?? settings.description;
@@ -30,7 +52,7 @@ export function Hero({ settings, serviceStatus }: { settings: SiteSettings; serv
       {hero?.media ? (
         <HeroMedia media={hero.media} />
       ) : (
-        <div aria-hidden="true" className="bg-grain absolute inset-0 -z-20">
+        <div aria-hidden="true" className="bg-grain hero-ken-burns absolute inset-0 -z-20">
           <div className="absolute inset-0 bg-[radial-gradient(90%_70%_at_50%_100%,var(--color-primary-tint-strong),transparent_65%)]" />
         </div>
       )}
@@ -39,14 +61,28 @@ export function Hero({ settings, serviceStatus }: { settings: SiteSettings; serv
       <div aria-hidden="true" className="from-dark via-dark/70 absolute inset-0 -z-10 bg-gradient-to-t to-dark/20" />
 
       <Container className="relative flex flex-col items-center py-20 text-center sm:py-28">
-        <div className="animate-in fade-in-0 slide-in-from-bottom-4 flex max-w-4xl flex-col items-center duration-700 motion-reduce:animate-none">
-          <LiveServiceBadge initial={serviceStatus} />
-          <h1 className="font-display text-display-2xl mt-6 uppercase leading-[0.95] text-on-dark">
+        <motion.div
+          initial={reduceMotion ? 'visible' : 'hidden'}
+          animate="visible"
+          variants={container}
+          className="flex max-w-4xl flex-col items-center"
+        >
+          <motion.div variants={rise}>
+            <LiveServiceBadge initial={serviceStatus} />
+          </motion.div>
+          <motion.h1
+            variants={reduceMotion ? rise : headlineRise}
+            className="font-display text-display-2xl mt-6 uppercase leading-[0.95] text-on-dark"
+          >
             {headline}
             {hero?.headlineAccent ? <span className="text-highlight block">{hero.headlineAccent}</span> : null}
-          </h1>
-          {subheadline ? <p className="text-muted mt-6 max-w-xl text-body-lg text-pretty">{subheadline}</p> : null}
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
+          </motion.h1>
+          {subheadline ? (
+            <motion.p variants={rise} className="text-muted mt-6 max-w-xl text-body-lg text-pretty">
+              {subheadline}
+            </motion.p>
+          ) : null}
+          <motion.div variants={rise} className="mt-10 flex flex-wrap justify-center gap-3">
             <Button asChild size="lg">
               <Link href={primary.href}>
                 {primary.href === routes.watch() ? <Play className="h-4 w-4 fill-current" aria-hidden="true" /> : null}
@@ -61,8 +97,8 @@ export function Hero({ settings, serviceStatus }: { settings: SiteSettings; serv
             >
               <Link href={secondary.href}>{secondary.label}</Link>
             </Button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {!hasServiceBar ? (
           <span
