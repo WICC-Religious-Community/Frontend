@@ -3,7 +3,7 @@ import type { FieldValues, UseFormRegister } from 'react-hook-form';
 import { cn } from '@/lib/utils/cn';
 
 const controlClass =
-  'border-border-strong w-full rounded-md border bg-transparent px-4 py-2.5 text-body-sm outline-none focus:border-primary';
+  'border-border-strong w-full rounded-md border bg-transparent px-4 py-3 text-body-sm text-ink outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/15';
 
 export function Field({
   label,

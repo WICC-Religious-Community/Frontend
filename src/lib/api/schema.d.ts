@@ -478,6 +478,7 @@ export interface components {
         Pillar: {
             title: string;
             description?: string;
+            imageUrl?: string;
         };
         ServiceStatus: {
             isLive: boolean;

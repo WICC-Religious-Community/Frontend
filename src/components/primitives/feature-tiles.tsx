@@ -31,7 +31,14 @@ export function FeatureTiles({ items, featureFirst = false }: { items: FeatureTi
       {items.map((item, index) => (
         <Reveal key={item.id} className={cn(featureFirst && index === 0 && 'sm:col-span-2 lg:row-span-2')} delay={index * 0.04}>
           <Link href={item.href} className="group relative flex h-full flex-col overflow-hidden rounded-lg">
-            <Figure src={item.imageUrl} alt={item.title} fill className="h-full" imageClassName="group-hover:scale-105" />
+            <Figure
+              src={item.imageUrl}
+              alt={item.title}
+              fill
+              sizes="(min-width: 1024px) 40vw, (min-width: 640px) 60vw, 100vw"
+              className="h-full"
+              imageClassName="group-hover:scale-105"
+            />
             <div className="from-dark/80 absolute inset-x-0 top-0 h-32 bg-gradient-to-b to-transparent" aria-hidden="true" />
             <div className="from-dark/90 absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t to-transparent" aria-hidden="true" />
             <div className="relative p-5">

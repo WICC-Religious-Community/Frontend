@@ -330,9 +330,20 @@ html[data-theme='dark'] * {
   h1,
   h2,
   h3,
-  h4 {
+  h4,
+  .font-display {
     font-family: var(--font-display);
     font-weight: 400; /* Anton is a single-weight display face — already maximally bold */
+    /* A stray font-semibold/font-bold utility must not trigger synthetic
+       (fake) bolding on top of an already-black-weight display face — that
+       looks distorted at hero scale. Anton only ever renders as itself. */
+    font-synthesis-weight: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
     letter-spacing: -0.01em;
     line-height: 1;
     text-wrap: balance;

@@ -54,6 +54,7 @@ export interface Hero {
 export interface Pillar {
   title: string;
   description?: string;
+  imageUrl?: string;
 }
 
 export interface SiteSettings {

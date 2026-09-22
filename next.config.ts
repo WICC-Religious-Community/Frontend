@@ -19,6 +19,9 @@ const nextConfig: NextConfig = {
       ...mediaHosts.map(hostname => ({ protocol: 'https' as const, hostname, pathname: '/**' })),
     ],
     formats: ['image/webp', 'image/avif'],
+    // Next 16 requires every quality value used with next/image to be allow-listed.
+    // 75 is Next's own default; 82 is what `Figure` (components/primitives/figure.tsx) requests.
+    qualities: [75, 82],
   },
 
   compiler: {

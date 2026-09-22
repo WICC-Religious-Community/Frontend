@@ -63,7 +63,9 @@ const siteSettingsSchema = z.object({
     .object({ enabled: z.boolean(), text: z.string(), href: z.string().optional() })
     .optional(),
   hero: heroSchema.optional(),
-  pillars: z.array(z.object({ title: z.string(), description: z.string().optional() })).default([]),
+  pillars: z
+    .array(z.object({ title: z.string(), description: z.string().optional(), imageUrl: z.string().optional() }))
+    .default([]),
 });
 
 export function toSiteSettings(dto: unknown): SiteSettings {

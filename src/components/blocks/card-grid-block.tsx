@@ -16,11 +16,11 @@ export function CardGridBlock({ data }: { data: Record<string, unknown> }) {
   return (
     <Container className="py-section-sm">
       {title ? <SectionHeader title={title} size="sm" align="center" /> : null}
-      <Grid columns={3} className="mt-8">
+      <Grid columns={3} className="mt-10">
         {items.map(item => (
-          <div key={item.title} className="border-border rounded-lg border p-6">
-            <h3 className="font-display text-heading-sm font-semibold text-ink">{item.title}</h3>
-            {item.body ? <p className="text-muted mt-2 text-body-sm">{item.body}</p> : null}
+          <div key={item.title} className="border-border border-t-primary group border-t-2 pt-5 transition-colors">
+            <h3 className="font-display text-heading-sm uppercase text-ink">{item.title}</h3>
+            {item.body ? <p className="text-muted mt-2 text-body-sm leading-relaxed">{item.body}</p> : null}
           </div>
         ))}
       </Grid>

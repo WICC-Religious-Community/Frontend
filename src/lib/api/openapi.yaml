@@ -438,6 +438,7 @@ components:
       properties:
         title: { type: string }
         description: { type: string }
+        imageUrl: { type: string }
 
     ServiceStatus:
       type: object

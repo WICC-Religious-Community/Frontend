@@ -33,9 +33,21 @@ export const sampleSiteSettings: SiteSettings = {
     secondaryCta: { label: 'Plan a Visit', href: '/visit' },
   },
   pillars: [
-    { title: 'Worship', description: 'Gathering together to honor God through music, prayer, and teaching.' },
-    { title: 'Community', description: 'Real relationships that walk with you through every season of life.' },
-    { title: 'Service', description: 'Putting faith into action — in our neighborhoods and beyond.' },
+    {
+      title: 'Worship',
+      description: 'Gathering together to honor God through music, prayer, and teaching.',
+      imageUrl: unsplash('1508829040592-72f179f8a73f', 800),
+    },
+    {
+      title: 'Community',
+      description: 'Real relationships that walk with you through every season of life.',
+      imageUrl: unsplash('1628717341663-0007b0ee2597', 800),
+    },
+    {
+      title: 'Service',
+      description: 'Putting faith into action — in our neighborhoods and beyond.',
+      imageUrl: unsplash('1593113616828-6f22bca04804', 800),
+    },
   ],
 };
 

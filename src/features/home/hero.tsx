@@ -13,7 +13,9 @@ import { HeroServiceBar } from './hero-service-bar';
  * (`settings.hero`); with none published it falls back to a typographic
  * hero — a considered dark surface (grain + accent glow), never a bare
  * gradient. Centered, oversized, uppercase display type with an accent-color
- * second line — the one deliberate "statement" moment on the page.
+ * second line — the one deliberate "statement" moment on the page. Pulls
+ * itself up under the header (see `components/layout/header.tsx`), which
+ * starts transparent here and only solidifies on scroll.
  */
 export function Hero({ settings, serviceStatus }: { settings: SiteSettings; serviceStatus: ServiceStatus }) {
   const { hero } = settings;
@@ -24,7 +26,7 @@ export function Hero({ settings, serviceStatus }: { settings: SiteSettings; serv
   const hasServiceBar = settings.serviceTimes.length > 0 || Boolean(settings.address);
 
   return (
-    <section className="on-dark bg-dark relative isolate flex min-h-[max(34rem,90svh)] flex-col justify-end overflow-clip">
+    <section className="on-dark bg-dark relative isolate -mt-18 flex min-h-[max(34rem,90svh)] flex-col justify-end overflow-clip">
       {hero?.media ? (
         <HeroMedia media={hero.media} />
       ) : (
