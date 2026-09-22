@@ -53,7 +53,12 @@ export function Hero({ settings, serviceStatus }: { settings: SiteSettings; serv
                 {primary.label}
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-white/30 text-on-dark hover:bg-white/10">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="border-white/25 bg-white/10 text-on-dark shadow-[0_4px_24px_-8px_rgba(0,0,0,0.4)] backdrop-blur-md transition-[background-color,border-color] hover:border-white/40 hover:bg-white/20"
+            >
               <Link href={secondary.href}>{secondary.label}</Link>
             </Button>
           </div>

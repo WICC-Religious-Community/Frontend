@@ -4,20 +4,21 @@ import { cn } from '@/lib/utils/cn';
 import { Slot } from '@/lib/utils/slot';
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-body-sm font-semibold uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-body-sm font-semibold uppercase tracking-wide transition-[background-color,color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        primary: 'bg-primary text-on-primary hover:bg-primary-dark',
-        dark: 'bg-dark text-on-dark hover:bg-dark-2',
+        primary:
+          'btn-sheen bg-gradient-to-br from-primary-light to-primary text-on-primary shadow-[0_8px_28px_-10px_var(--color-primary)] transition-[background-image,box-shadow,transform] hover:from-primary hover:to-primary-dark hover:shadow-[0_10px_32px_-8px_var(--color-primary)]',
+        dark: 'btn-sheen bg-dark text-on-dark hover:bg-dark-2',
         outline: 'border border-border-strong bg-transparent text-ink hover:bg-canvas-2',
         ghost: 'bg-transparent text-ink hover:bg-canvas-2',
         link: 'bg-transparent p-0 text-primary-dark normal-case tracking-normal underline underline-offset-4 hover:text-primary',
       },
       size: {
-        default: 'h-11 px-6',
+        default: 'h-10 px-5 sm:h-11 sm:px-6',
         sm: 'h-9 px-4 text-caption',
-        lg: 'h-13 px-8 text-body',
+        lg: 'h-12 px-7 text-body-sm sm:h-13 sm:px-8 sm:text-body',
         icon: 'h-10 w-10',
       },
     },

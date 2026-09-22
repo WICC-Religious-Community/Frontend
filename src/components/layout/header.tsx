@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from 'motion/react';
-import { ChevronDown } from 'lucide-react';
+import { Calendar, ChevronDown, Heart } from 'lucide-react';
 import { Logo } from './logo';
 import { MobileNav } from './mobile-nav';
 import { Container } from '@/components/primitives';
@@ -14,17 +14,19 @@ import { routes } from '@/config/routes';
 import { cn } from '@/lib/utils/cn';
 
 const REVEAL_THRESHOLD = 96; // px scrolled before "hide on scroll down" engages
-const SOLID_THRESHOLD = 40; // px scrolled before the backdrop starts solidifying
+const SOLID_THRESHOLD = 40; // px scrolled before the backdrop/nav start appearing
 
 /**
- * The one header, everywhere. Three scroll-driven behaviors, not a static
- * bar with a single breakpoint:
+ * The one header, everywhere. Scroll-driven, not a static bar with a single
+ * breakpoint:
  *  1. On the homepage only, starts fully transparent over the hero (which
- *     pulls itself up underneath it — see `Hero`) and fades in a blurred
- *     black backdrop as the page scrolls, rather than snapping between two
- *     states.
+ *     pulls itself up underneath it — see `Hero`) with the nav links
+ *     hidden — just the mark and the two CTAs over the photo/video. Past
+ *     ~40px both the frosted-glass backdrop and the nav links fade in
+ *     together, rather than everything being visible against a transparent
+ *     backdrop from the first frame.
  *  2. Slides out of view on scroll-down past a threshold, slides back in on
- *     scroll-up — the header only takes space when it's wanted.
+ *     scroll-up.
  *  3. Nav links get a sliding underline on hover/focus; the dropdown panel
  *     animates in rather than toggling visibility.
  */
@@ -50,32 +52,54 @@ export function Header() {
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       className="on-dark sticky top-0 z-40"
     >
-      {/* Backdrop is a separate layer, faded in by scroll — a smooth blend
-          instead of a background-color snapping between two values. */}
+      {/* A frosted-glass backdrop, faded in by scroll — stays translucent
+          even once "solid" rather than going opaque, so the header never
+          fully blocks whatever is behind it. */}
       <div
         aria-hidden="true"
         className={cn(
-          'bg-dark/95 absolute inset-0 backdrop-blur-md transition-opacity duration-500 ease-out',
+          'bg-dark/50 absolute inset-0 backdrop-blur-xl transition-opacity duration-500 ease-out',
           solid ? 'opacity-100' : 'opacity-0'
         )}
       />
       <div className={cn('border-b transition-colors duration-500', solid ? 'border-white/10' : 'border-transparent')} />
 
       <Container className="relative flex h-18 items-center justify-between gap-6">
-        <Logo dark />
+        <Logo />
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
+        <motion.nav
+          aria-label="Primary"
+          initial={false}
+          animate={{ opacity: solid || reduceMotion ? 1 : 0, y: solid || reduceMotion ? 0 : -6 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          // Hidden (not just visually faded) until solid — keeps invisible
+          // links out of the tab order for keyboard users at the very top
+          // of the homepage, rather than merely un-clickable.
+          inert={!solid}
+          className="hidden items-center gap-1 lg:flex"
+        >
           {MAIN_NAV.map(group => (
             <NavItem key={group.label} group={group} />
           ))}
-        </nav>
+        </motion.nav>
 
         <div className="flex items-center gap-2">
-          <Button asChild variant="outline" size="sm" className="hidden border-white/30 text-on-dark hover:bg-white/10 sm:inline-flex">
-            <Link href={routes.visit()}>Plan a Visit</Link>
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="hidden border-white/25 bg-white/10 text-on-dark backdrop-blur-md transition-[background-color,border-color] hover:border-white/40 hover:bg-white/20 sm:inline-flex"
+          >
+            <Link href={routes.visit()}>
+              <Calendar aria-hidden="true" className="h-4 w-4" />
+              Plan a Visit
+            </Link>
           </Button>
           <Button asChild size="sm">
-            <Link href={routes.give()}>Give</Link>
+            <Link href={routes.give()}>
+              <Heart aria-hidden="true" className="h-4 w-4" />
+              Give
+            </Link>
           </Button>
           <MobileNav />
         </div>
@@ -88,11 +112,11 @@ function NavItem({ group }: { group: (typeof MAIN_NAV)[number] }) {
   const [open, setOpen] = useState(false);
 
   const linkClass =
-    'group/link relative text-muted hover:text-on-dark rounded-full px-3 py-2 text-label font-semibold uppercase tracking-wide transition-colors';
+    'group/link relative text-on-dark/70 hover:text-on-dark rounded-full px-3 py-2 text-caption font-bold uppercase tracking-wide transition-colors';
   const underline = (
     <span
       aria-hidden="true"
-      className="bg-primary absolute inset-x-3 bottom-1 h-px origin-left scale-x-0 transition-transform duration-300 ease-out group-hover/link:scale-x-100"
+      className="bg-primary absolute inset-x-3.5 bottom-1 h-px origin-left scale-x-0 transition-transform duration-300 ease-out group-hover/link:scale-x-100"
     />
   );
 

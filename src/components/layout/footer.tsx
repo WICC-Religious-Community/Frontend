@@ -16,7 +16,7 @@ export function Footer({ settings, legalLinks }: { settings: SiteSettings; legal
       <Container className="py-section-sm">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
           <div>
-            <Logo dark />
+            <Logo />
             <p className="text-muted mt-4 max-w-sm text-body-sm leading-relaxed">{settings.description}</p>
             <div className="mt-6 space-y-2 text-body-sm">
               {settings.address ? (

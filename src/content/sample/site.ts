@@ -1,8 +1,12 @@
 import { SITE } from '@/config/site';
 import type { ServiceStatus, SiteSettings } from '@/domain/site/model';
-import { SAMPLE_HERO_VIDEO_URL, unsplash } from './media';
 
-/** Placeholder — see `src/content/sample/README.md`. Not real WICC information. */
+/**
+ * Placeholder — see `src/content/sample/README.md`. Facts (address, phone,
+ * email, times) are still obviously-fake placeholders. The hero photo is
+ * real, church-provided imagery; everywhere else with no photo renders the
+ * app's own gradient placeholder rather than unrelated stock photography.
+ */
 export const sampleSiteSettings: SiteSettings = {
   name: SITE.name,
   description: 'A place to belong, grow, and serve together.',
@@ -24,30 +28,17 @@ export const sampleSiteSettings: SiteSettings = {
     headlineAccent: 'Celebrating Life in Christ',
     subheadline: 'A community built on faith, belonging, and purpose.',
     media: {
-      kind: 'video',
-      url: SAMPLE_HERO_VIDEO_URL,
-      posterUrl: unsplash('1507692049790-de58290a4334', 1600),
-      alt: '',
+      kind: 'image',
+      url: '/brand/hero-worship.jpg',
+      alt: 'Worship at Word Impact Community Church',
     },
     primaryCta: { label: 'Watch', href: '/watch' },
     secondaryCta: { label: 'Plan a Visit', href: '/visit' },
   },
   pillars: [
-    {
-      title: 'Worship',
-      description: 'Gathering together to honor God through music, prayer, and teaching.',
-      imageUrl: unsplash('1508829040592-72f179f8a73f', 800),
-    },
-    {
-      title: 'Community',
-      description: 'Real relationships that walk with you through every season of life.',
-      imageUrl: unsplash('1628717341663-0007b0ee2597', 800),
-    },
-    {
-      title: 'Service',
-      description: 'Putting faith into action — in our neighborhoods and beyond.',
-      imageUrl: unsplash('1593113616828-6f22bca04804', 800),
-    },
+    { title: 'Worship', description: 'Gathering together to honor God through music, prayer, and teaching.' },
+    { title: 'Community', description: 'Real relationships that walk with you through every season of life.' },
+    { title: 'Service', description: 'Putting faith into action — in our neighborhoods and beyond.' },
   ],
 };
 
