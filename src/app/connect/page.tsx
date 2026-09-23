@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Container, Page, SectionHeader } from '@/components/primitives';
+import { Container, Page, PageMasthead } from '@/components/primitives';
 import { ConnectForm } from '@/features/connect/connect-form';
 import { buildPageMetadata } from '@/lib/seo/metadata';
 import { routes } from '@/config/routes';
@@ -14,11 +14,10 @@ export default function ConnectPage() {
   return (
     <Page>
       <Container className="py-section" width="narrow">
-        <SectionHeader
+        <PageMasthead
           eyebrow="Next Steps"
           title="Get Connected"
           description="Tell us what you're looking for, and someone from our team will follow up personally."
-          size="lg"
         />
         <div className="mt-12">
           <ConnectForm />

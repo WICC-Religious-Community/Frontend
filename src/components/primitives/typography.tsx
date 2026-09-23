@@ -37,7 +37,7 @@ export function SectionHeader({
         )}
       >
         {title}
-        {accent ? <span className="text-primary-dark font-normal italic"> {accent}</span> : null}
+        {accent ? <span className="text-primary"> {accent}</span> : null}
       </Heading>
       {description ? (
         <p className={cn('text-muted mt-4 max-w-[52ch] text-body-lg', align === 'center' && 'mx-auto')}>
@@ -61,7 +61,7 @@ export function Prose({
         '[&_a]:text-primary-dark [&_a]:underline [&_a]:underline-offset-4',
         '[&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:text-heading-lg [&_h2]:font-display',
         '[&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-heading-md [&_h3]:font-display',
-        '[&_p]:mb-5 [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:pl-6 [&_blockquote]:border-l-2 [&_blockquote]:border-primary [&_blockquote]:pl-5 [&_blockquote]:italic [&_blockquote]:text-muted',
+        '[&_p]:mb-5 [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:pl-6 [&_blockquote]:border-l-2 [&_blockquote]:border-primary [&_blockquote]:pl-5 [&_blockquote]:text-muted',
         className
       )}
       {...props}

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Menu } from 'lucide-react';
+import { Calendar, Heart, Menu } from 'lucide-react';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { MAIN_NAV } from '@/config/site';
@@ -51,12 +51,18 @@ export function MobileNav() {
         <div className="mt-6 flex flex-col gap-3">
           <SheetClose asChild>
             <Button asChild size="lg">
-              <Link href={routes.give()}>Give</Link>
+              <Link href={routes.give()}>
+                <Heart aria-hidden="true" className="h-4 w-4" />
+                Give
+              </Link>
             </Button>
           </SheetClose>
           <SheetClose asChild>
             <Button asChild variant="outline" size="lg">
-              <Link href={routes.visit()}>Plan a Visit</Link>
+              <Link href={routes.visit()}>
+                <Calendar aria-hidden="true" className="h-4 w-4" />
+                Plan a Visit
+              </Link>
             </Button>
           </SheetClose>
         </div>

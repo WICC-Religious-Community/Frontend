@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Container, Grid, Page, Reveal, SectionHeader } from '@/components/primitives';
-import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
+import { Container, Grid, Page, PageMasthead, Reveal } from '@/components/primitives';
 import { getLeaders } from '@/domain/leadership/server';
 import { getSiteSettings } from '@/domain/site/server';
 import { buildPageMetadata } from '@/lib/seo/metadata';
@@ -13,50 +13,48 @@ export const metadata: Metadata = buildPageMetadata({
   path: routes.about(),
 });
 
+const LINKS = [
+  { title: 'What We Believe', description: 'What WICC believes.', href: routes.whatWeBelieve() },
+  { title: 'Leadership', description: 'The people who lead WICC.', href: routes.leadership() },
+] as const;
+
 export default async function AboutPage() {
   const [settings, leaders] = await Promise.all([getSiteSettings(), getLeaders()]);
 
   return (
     <Page>
       <Container className="py-section">
-        <SectionHeader eyebrow="About" title="About WICC" description={settings.description} size="lg" />
+        <PageMasthead eyebrow="About" title="About WICC" description={settings.description} />
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2">
-          <Reveal>
-            <div className="border-border h-full rounded-lg border p-8">
-              <h2 className="font-display text-heading-md font-semibold text-ink">What We Believe</h2>
-              <p className="text-muted mt-3 text-body-sm leading-relaxed">
-                What WICC believes.
-              </p>
-              <Button asChild variant="link" className="mt-4">
-                <Link href={routes.whatWeBelieve()}>Read our beliefs</Link>
-              </Button>
-            </div>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <div className="border-border h-full rounded-lg border p-8">
-              <h2 className="font-display text-heading-md font-semibold text-ink">Leadership</h2>
-              <p className="text-muted mt-3 text-body-sm leading-relaxed">
-                The people who lead WICC.
-              </p>
-              <Button asChild variant="link" className="mt-4">
-                <Link href={routes.leadership()}>Meet our leaders</Link>
-              </Button>
-            </div>
-          </Reveal>
-        </div>
-
-        <div className="mt-16">
-          <SectionHeader eyebrow="Our Team" title="Leadership" size="sm" />
-          <Grid columns={4} className="mt-8">
-            {leaders.slice(0, 4).map(leader => (
-              <Link key={leader.id} href={routes.leader(leader.slug)} className="text-center">
-                <p className="font-display text-heading-sm font-semibold text-ink">{leader.name}</p>
-                {leader.role ? <p className="text-muted mt-1 text-body-sm">{leader.role}</p> : null}
+        <div className="border-border mt-12 border-t">
+          {LINKS.map((link, index) => (
+            <Reveal key={link.href} delay={index * 0.05}>
+              <Link href={link.href} className="group border-border flex items-center justify-between gap-4 border-b py-7">
+                <div>
+                  <h2 className="font-display group-hover:text-primary-dark text-heading-md font-semibold text-ink transition-colors">
+                    {link.title}
+                  </h2>
+                  <p className="text-muted mt-1 text-body-sm">{link.description}</p>
+                </div>
+                <ArrowRight className="text-subtle h-5 w-5 shrink-0 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
-            ))}
-          </Grid>
+            </Reveal>
+          ))}
         </div>
+
+        {leaders.length > 0 ? (
+          <div className="mt-16">
+            <p className="eyebrow">Our Team</p>
+            <Grid columns={4} className="mt-8">
+              {leaders.slice(0, 4).map(leader => (
+                <Link key={leader.id} href={routes.leader(leader.slug)} className="hover:text-primary-dark text-center transition-colors">
+                  <p className="font-display text-heading-sm font-semibold text-ink">{leader.name}</p>
+                  {leader.role ? <p className="text-muted mt-1 text-body-sm">{leader.role}</p> : null}
+                </Link>
+              ))}
+            </Grid>
+          </div>
+        ) : null}
       </Container>
     </Page>
   );

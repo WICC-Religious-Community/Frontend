@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Container, Page, SectionHeader } from '@/components/primitives';
+import { Container, Page, PageMasthead } from '@/components/primitives';
 import { SermonLibrary } from '@/features/sermons/sermon-library';
 import { getSermons, getSermonSeriesList } from '@/domain/sermons/server';
 import { buildPageMetadata } from '@/lib/seo/metadata';
@@ -17,8 +17,8 @@ export default async function SermonsPage() {
   return (
     <Page>
       <Container className="py-section">
-        <SectionHeader eyebrow="Watch & Listen" title="Sermon Library" size="lg" align="center" />
-        <div className="mt-12">
+        <PageMasthead eyebrow="Watch & Listen" title="Sermon Library" />
+        <div className="mt-10">
           <SermonLibrary initialPage={sermonPage} seriesList={seriesList} />
         </div>
       </Container>

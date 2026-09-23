@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { BlockRenderer } from '@/components/blocks/block-renderer';
-import { Container, EmptyState, Page, SectionHeader } from '@/components/primitives';
+import { Container, EmptyState, Page, PageMasthead } from '@/components/primitives';
 import { getPage } from '@/domain/pages/server';
 import { buildPageMetadata } from '@/lib/seo/metadata';
 import { routes } from '@/config/routes';
@@ -25,7 +25,7 @@ export default async function WhatWeBelievePage() {
     return (
       <Page>
         <Container className="py-section" width="narrow">
-          <SectionHeader title="What We Believe" size="lg" />
+          <PageMasthead title="What We Believe" />
           <div className="mt-12">
             <EmptyState title="Not published yet" description="This page hasn’t been published yet." />
           </div>

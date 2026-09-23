@@ -9,9 +9,9 @@
 
 export const SITE = {
   name: 'WICC',
-  legalName: 'WICC',
+  legalName: 'Word Impact Community Church',
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000',
-  description: 'The official website of WICC.',
+  description: 'The official website of Word Impact Community Church.',
   locale: 'en_US',
 } as const;
 

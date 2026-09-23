@@ -43,6 +43,8 @@ export interface HeroMedia {
 
 export interface Hero {
   headline?: string;
+  /** A short phrase rendered in the accent color on its own line, under `headline`. */
+  headlineAccent?: string;
   subheadline?: string;
   media?: HeroMedia;
   primaryCta?: Cta;
@@ -52,6 +54,7 @@ export interface Hero {
 export interface Pillar {
   title: string;
   description?: string;
+  imageUrl?: string;
 }
 
 export interface SiteSettings {

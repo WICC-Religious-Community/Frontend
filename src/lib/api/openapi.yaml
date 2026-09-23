@@ -419,6 +419,7 @@ components:
       description: Homepage hero, authored by the church. Every field is optional.
       properties:
         headline: { type: string }
+        headlineAccent: { type: string }
         subheadline: { type: string }
         media:
           type: object
@@ -437,6 +438,7 @@ components:
       properties:
         title: { type: string }
         description: { type: string }
+        imageUrl: { type: string }
 
     ServiceStatus:
       type: object

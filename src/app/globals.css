@@ -20,25 +20,28 @@ html[data-theme='dark'] * {
   /* --------------------------------------------------------------------- *
    * RAW PALETTE — the only place literal colours are allowed.             *
    * --------------------------------------------------------------------- */
-  --paper: #faf8f3;
-  --paper-2: #f2ede3;
-  --paper-3: #e7e0d2;
+  --paper: #ffffff;
+  --paper-2: #f4f4f5;
+  --paper-3: #e7e7e9;
   --white: #ffffff;
 
-  --midnight: #0b0f1a; /* near-black navy — ink & dark sections */
-  --midnight-2: #131826;
-  --midnight-3: #1d2333;
+  --midnight: #0a0a0b; /* true near-black — ink & dark sections */
+  --midnight-2: #141415;
+  --midnight-3: #1f1f21;
 
-  --gold: #b98a2e; /* WICC primary — warm, restrained ecclesiastical gold */
-  --gold-light: #d8ab4f;
-  --gold-dark: #8f6a1f;
+  --accent: #2454e8; /* WICC primary — confident blue */
+  --accent-light: #5b82f2;
+  --accent-dark: #1638b0;
 
-  --ink-900: #171410;
-  --ink-600: #5b554a; /* muted body text */
-  --ink-400: #8b8477; /* subtle / captions */
+  --highlight: #f6c445; /* sparing yellow — used deliberately, not everywhere */
+  --highlight-dark: #c99a1f;
 
-  --line: rgba(23, 20, 16, 0.12);
-  --line-strong: rgba(23, 20, 16, 0.22);
+  --ink-900: #0f0f10;
+  --ink-600: #52525a; /* muted body text */
+  --ink-400: #86868c; /* subtle / captions */
+
+  --line: rgba(15, 15, 16, 0.1);
+  --line-strong: rgba(15, 15, 16, 0.2);
 
   --success: #2f9e5e;
   --warning: #c98a1a;
@@ -58,17 +61,21 @@ html[data-theme='dark'] * {
   --color-ink: var(--ink-900);
   --color-muted: var(--ink-600);
   --color-subtle: var(--ink-400);
-  --color-on-dark: #f4efe4;
-  --color-on-primary: #1b1405;
+  --color-on-dark: #f5f5f4;
+  --color-on-primary: #ffffff;
 
   --color-border: var(--line);
   --color-border-strong: var(--line-strong);
 
-  --color-primary: var(--gold);
-  --color-primary-light: var(--gold-light);
-  --color-primary-dark: var(--gold-dark);
-  --color-primary-tint: color-mix(in srgb, var(--gold) 12%, transparent);
-  --color-primary-tint-strong: color-mix(in srgb, var(--gold) 22%, transparent);
+  --color-primary: var(--accent);
+  --color-primary-light: var(--accent-light);
+  --color-primary-dark: var(--accent-dark);
+  --color-primary-tint: color-mix(in srgb, var(--accent) 12%, transparent);
+  --color-primary-tint-strong: color-mix(in srgb, var(--accent) 22%, transparent);
+
+  /* The deliberate "little yellow" — one or two moments per page, never a base color. */
+  --color-highlight: var(--highlight);
+  --color-highlight-dark: var(--highlight-dark);
 
   --color-dark: var(--midnight);
   --color-dark-2: var(--midnight-2);
@@ -84,11 +91,11 @@ html[data-theme='dark'] * {
    * text responsive to browser zoom; the small vw term keeps growth       *
    * gentle. Bridged to text-* utilities in @theme.                        *
    * --------------------------------------------------------------------- */
-  --type-display-2xl: clamp(2.5rem, 1.9rem + 3vw, 4.25rem);
-  --type-display-xl: clamp(2.1rem, 1.65rem + 2.25vw, 3.4rem);
-  --type-display-lg: clamp(1.85rem, 1.55rem + 1.5vw, 2.75rem);
-  --type-display-md: clamp(1.55rem, 1.4rem + 0.9vw, 2.15rem);
-  --type-display-sm: clamp(1.35rem, 1.27rem + 0.45vw, 1.7rem);
+  --type-display-2xl: clamp(2.75rem, 1.7rem + 5vw, 5.75rem);
+  --type-display-xl: clamp(2.35rem, 1.6rem + 3.5vw, 4.5rem);
+  --type-display-lg: clamp(2rem, 1.6rem + 2vw, 3.25rem);
+  --type-display-md: clamp(1.65rem, 1.4rem + 1.2vw, 2.5rem);
+  --type-display-sm: clamp(1.4rem, 1.27rem + 0.6vw, 1.85rem);
   --type-heading-lg: clamp(1.2rem, 1.12rem + 0.4vw, 1.5rem);
   --type-heading-md: clamp(1.08rem, 1.03rem + 0.3vw, 1.3rem);
   --type-heading-sm: clamp(1rem, 0.97rem + 0.2vw, 1.13rem);
@@ -122,28 +129,28 @@ html[data-theme='dark'] * {
   --radius-pill: 999px;
 
   /* Third-party APIs that can't read CSS vars (maps, share images). */
-  --js-color-primary: #b98a2e;
-  --js-color-dark: #0b0f1a;
+  --js-color-primary: #2454e8;
+  --js-color-dark: #0a0a0b;
 }
 
 /* Explicit dark theme (opt-in via the toggle). */
 :root[data-theme='dark'] {
   --color-background: var(--midnight);
   --color-surface: var(--midnight-2);
-  --color-surface-sunken: #0e121d;
+  --color-surface-sunken: #141415;
   --color-surface-raised: var(--midnight-3);
   --color-canvas: var(--midnight);
   --color-canvas-2: var(--midnight-2);
 
-  --color-ink: #f4efe4;
-  --color-muted: #b8b1a2;
-  --color-subtle: #8a8375;
+  --color-ink: #f5f5f4;
+  --color-muted: #b4b4b8;
+  --color-subtle: #87878c;
 
   --color-border: rgba(255, 255, 255, 0.12);
   --color-border-strong: rgba(255, 255, 255, 0.22);
 
-  --color-primary: var(--gold-light);
-  --color-primary-dark: var(--gold);
+  --color-primary: var(--accent-light);
+  --color-primary-dark: var(--accent);
 }
 
 /* System dark preference, only when the user hasn't forced light. */
@@ -151,42 +158,45 @@ html[data-theme='dark'] * {
   :root:not([data-theme='light']) {
     --color-background: var(--midnight);
     --color-surface: var(--midnight-2);
-    --color-surface-sunken: #0e121d;
+    --color-surface-sunken: #141415;
     --color-surface-raised: var(--midnight-3);
     --color-canvas: var(--midnight);
     --color-canvas-2: var(--midnight-2);
 
-    --color-ink: #f4efe4;
-    --color-muted: #b8b1a2;
-    --color-subtle: #8a8375;
+    --color-ink: #f5f5f4;
+    --color-muted: #b4b4b8;
+    --color-subtle: #87878c;
 
     --color-border: rgba(255, 255, 255, 0.12);
     --color-border-strong: rgba(255, 255, 255, 0.22);
 
-    --color-primary: var(--gold-light);
-    --color-primary-dark: var(--gold);
+    --color-primary: var(--accent-light);
+    --color-primary-dark: var(--accent);
   }
 }
 
 /* .on-dark re-themes the semantic tokens to their dark values for any
    deliberately dark section (hero, CTA band, feature panel), independent of
-   the page theme — so descendants and bare h* */
+   the page theme — so descendants and bare h* pick up light-on-dark colors.
+   Deliberately does NOT set its own background-color/color: a section that
+   wants to actually paint dark adds `bg-dark` (every current user already
+   does) — a header that wants to stay transparent over a hero can use
+   `on-dark` for its children's text colors without being forced opaque. */
 .on-dark {
   --color-background: var(--midnight);
   --color-surface: var(--midnight-2);
-  --color-surface-sunken: #0e121d;
+  --color-surface-sunken: #141415;
   --color-surface-raised: var(--midnight-3);
   --color-canvas: var(--midnight);
   --color-canvas-2: var(--midnight-2);
-  --color-ink: #f4efe4;
-  --color-muted: #b8b1a2;
-  --color-subtle: #948d7e;
+  --color-ink: #f5f5f4;
+  --color-muted: #b4b4b8;
+  --color-subtle: #8c8c90;
   --color-border: rgba(255, 255, 255, 0.14);
   --color-border-strong: rgba(255, 255, 255, 0.26);
-  --color-primary: var(--gold-light);
-  --color-primary-dark: var(--gold);
+  --color-primary: var(--accent-light);
+  --color-primary-dark: var(--accent);
   color: var(--color-ink);
-  background-color: var(--color-background);
 }
 
 /* =============================================================================
@@ -212,6 +222,8 @@ html[data-theme='dark'] * {
   --color-primary-dark: var(--color-primary-dark);
   --color-primary-tint: var(--color-primary-tint);
   --color-primary-tint-strong: var(--color-primary-tint-strong);
+  --color-highlight: var(--color-highlight);
+  --color-highlight-dark: var(--color-highlight-dark);
   --color-dark: var(--color-dark);
   --color-dark-2: var(--color-dark-2);
   --color-dark-3: var(--color-dark-3);
@@ -224,8 +236,7 @@ html[data-theme='dark'] * {
     var(--font-body), ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
     Roboto, Helvetica, Arial, sans-serif;
   --font-display:
-    var(--font-display-face), ui-serif, Georgia, Cambria, 'Times New Roman',
-    serif;
+    var(--font-display-face), Impact, 'Arial Narrow Bold', sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --text-display-2xl: var(--type-display-2xl);
@@ -322,10 +333,22 @@ html[data-theme='dark'] * {
   h1,
   h2,
   h3,
-  h4 {
+  h4,
+  .font-display {
     font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-weight: 400; /* Anton is a single-weight display face — already maximally bold */
+    /* A stray font-semibold/font-bold utility must not trigger synthetic
+       (fake) bolding on top of an already-black-weight display face — that
+       looks distorted at hero scale. Anton only ever renders as itself. */
+    font-synthesis-weight: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.01em;
+    line-height: 1;
     text-wrap: balance;
     color: var(--color-ink);
   }
@@ -354,5 +377,65 @@ html[data-theme='dark'] * {
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--color-primary-dark);
+  }
+
+  /* A whisper of film grain over dark, image-less panels (hero fallback, CTA
+     bands) — the difference between "flat gradient" and an intentional,
+     tactile surface. Inline SVG turbulence, no network request. */
+  .bg-grain {
+    position: relative;
+  }
+  .bg-grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* The one premium button hover: a diagonal light sheen sweeps across on
+     hover/focus instead of the background just snapping to a darker flat
+     color. Applied to the filled button variants only (primary, dark). */
+  .btn-sheen {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .btn-sheen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.35) 48%, rgb(255 255 255 / 0.35) 52%, transparent 70%);
+    transform: translateX(-130%);
+    transition: transform 0.7s var(--ease-out-soft);
+  }
+  .btn-sheen:hover::after,
+  .btn-sheen:focus-visible::after {
+    transform: translateX(130%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-sheen::after {
+      display: none;
+    }
+  }
+
+  /* A slow, one-time zoom-out on the hero background — the classic "Ken
+     Burns" cue that separates a considered cinematic hero from a static
+     photo dropped in as a backdrop. The site-wide reduced-motion rule above
+     already collapses this to 0.01ms, so no separate override is needed. */
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1.08);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  .hero-ken-burns {
+    animation: hero-zoom 20s var(--ease-out-soft) forwards;
   }
 }

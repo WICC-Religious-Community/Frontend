@@ -1,14 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { Play, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useSermons } from '@/domain/sermons/client';
 import type { Paginated } from '@/domain/pagination';
 import type { Sermon, SermonSeries } from '@/domain/sermons/model';
-import { Figure, Grid, LoadMore, EmptyState } from '@/components/primitives';
-import { formatShortDate } from '@/lib/format/date';
-import { routes } from '@/config/routes';
+import { EmptyState, Grid, LoadMore } from '@/components/primitives';
+import { SermonCard } from './sermon-card';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 
 export function SermonLibrary({
@@ -37,29 +35,46 @@ export function SermonLibrary({
 
   return (
     <div>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
-          <Search className="text-subtle absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2" aria-hidden="true" />
+      <div className="border-border flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative flex-1 sm:max-w-xs">
+          <Search className="text-subtle absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2" aria-hidden="true" />
           <input
             type="search"
             value={search}
             onChange={event => setSearch(event.target.value)}
             placeholder="Search sermons…"
-            className="border-border-strong h-11 w-full rounded-md border bg-transparent pl-10 pr-4 text-body-sm outline-none focus:border-primary"
+            className="h-10 w-full border-b border-transparent bg-transparent pl-6 text-body-sm text-ink outline-none placeholder:text-subtle focus:border-primary"
           />
         </div>
-        <select
-          value={series ?? ''}
-          onChange={event => setSeries(event.target.value || undefined)}
-          className="border-border-strong h-11 rounded-md border bg-transparent px-4 text-body-sm outline-none focus:border-primary"
-        >
-          <option value="">All series</option>
-          {seriesList.map(item => (
-            <option key={item.slug} value={item.slug}>
-              {item.title}
-            </option>
-          ))}
-        </select>
+        {seriesList.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setSeries(undefined)}
+              className={
+                !series
+                  ? 'bg-primary text-on-primary rounded-full px-4 py-1.5 text-body-sm font-medium'
+                  : 'text-muted hover:text-ink rounded-full px-4 py-1.5 text-body-sm font-medium transition-colors'
+              }
+            >
+              All series
+            </button>
+            {seriesList.map(item => (
+              <button
+                key={item.slug}
+                type="button"
+                onClick={() => setSeries(item.slug)}
+                className={
+                  series === item.slug
+                    ? 'bg-primary text-on-primary rounded-full px-4 py-1.5 text-body-sm font-medium'
+                    : 'text-muted hover:text-ink rounded-full px-4 py-1.5 text-body-sm font-medium transition-colors'
+                }
+              >
+                {item.title}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       {sermons.length === 0 ? (
@@ -71,27 +86,7 @@ export function SermonLibrary({
       ) : (
         <Grid columns={3} className="mt-10">
           {sermons.map(sermon => (
-            <Link key={sermon.id} href={routes.sermon(sermon.slug)} className="group block">
-              <Figure
-                src={sermon.thumbnailUrl}
-                alt={sermon.title}
-                width={480}
-                height={270}
-                className="aspect-video"
-                imageClassName="group-hover:scale-105"
-              />
-              <div className="mt-4 flex items-start justify-between gap-3">
-                <div>
-                  <p className="font-display line-clamp-2 text-heading-sm font-semibold text-ink">{sermon.title}</p>
-                  <p className="text-subtle mt-1 text-caption">
-                    {sermon.speaker?.name} · {formatShortDate(sermon.publishedAt)}
-                  </p>
-                </div>
-                <span className="bg-primary text-on-primary flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
-                  <Play className="h-3.5 w-3.5 fill-current" />
-                </span>
-              </div>
-            </Link>
+            <SermonCard key={sermon.id} sermon={sermon} />
           ))}
         </Grid>
       )}

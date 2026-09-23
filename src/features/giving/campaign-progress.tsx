@@ -9,15 +9,15 @@ export function CampaignProgress({ campaign }: { campaign: GivingCampaign }) {
   const progress = campaignProgress(live);
 
   return (
-    <div className="border-border rounded-lg border p-6">
-      <p className="font-display text-heading-md font-semibold text-ink">{live.title}</p>
-      {live.description ? <p className="text-muted mt-2 text-body-sm">{live.description}</p> : null}
-      <div className="bg-canvas-2 mt-5 h-2.5 overflow-hidden rounded-full">
+    <div className="border-border border-b pb-8">
+      <p className="font-display text-heading-lg font-semibold text-ink">{live.title}</p>
+      {live.description ? <p className="text-muted mt-2 max-w-xl text-body-sm leading-relaxed">{live.description}</p> : null}
+      <div className="bg-canvas-2 mt-6 h-1.5 overflow-hidden rounded-full">
         <div className="bg-primary h-full rounded-full transition-all duration-700" style={{ width: formatPercent(progress) }} />
       </div>
-      <div className="text-muted mt-2 flex justify-between text-caption">
-        <span>
-          {formatCurrency(live.raisedAmount, live.currency as 'NGN' | 'USD')} raised
+      <div className="text-muted mt-3 flex justify-between text-body-sm">
+        <span className="text-ink font-semibold">
+          {formatCurrency(live.raisedAmount, live.currency as 'NGN' | 'USD')} <span className="text-muted font-normal">raised</span>
         </span>
         <span>Goal: {formatCurrency(live.goalAmount, live.currency as 'NGN' | 'USD')}</span>
       </div>

@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { motion, useReducedMotion, type Variants } from 'motion/react';
 import { Play } from 'lucide-react';
 import { Container } from '@/components/primitives';
 import { Button } from '@/components/ui/button';
@@ -8,52 +11,102 @@ import type { ServiceStatus, SiteSettings } from '@/domain/site/model';
 import { HeroMedia } from './hero-media';
 import { HeroServiceBar } from './hero-service-bar';
 
+const container: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.14, delayChildren: 0.15 } },
+};
+
+const rise: Variants = {
+  hidden: { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+};
+
+/** The headline gets its own, slightly grander entrance — a soft blur resolving into focus as it rises. */
+const headlineRise: Variants = {
+  hidden: { opacity: 0, y: 28, filter: 'blur(10px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
+};
+
 /**
  * Homepage hero. The church supplies the words and the media
- * (`settings.hero`); with none published it falls back to a typographic hero
- * of just the church's name. The header is transparent over this section
- * (see `components/layout/header.tsx`), hence the negative top margin.
+ * (`settings.hero`); with none published it falls back to a typographic
+ * hero — a considered dark surface (grain + accent glow), never a bare
+ * gradient. Centered, oversized, uppercase display type with an accent-color
+ * second line — the one deliberate "statement" moment on the page. Pulls
+ * itself up under the header (see `components/layout/header.tsx`), which
+ * starts transparent here and only solidifies on scroll. Content reveals in
+ * a staggered cascade (badge → headline → subhead → CTAs) rather than
+ * everything fading in as one block.
  */
 export function Hero({ settings, serviceStatus }: { settings: SiteSettings; serviceStatus: ServiceStatus }) {
+  const reduceMotion = useReducedMotion();
   const { hero } = settings;
   const headline = hero?.headline ?? settings.name;
   const subheadline = hero?.subheadline ?? settings.description;
   const primary = hero?.primaryCta ?? { label: 'Watch', href: routes.watch() };
   const secondary = hero?.secondaryCta ?? { label: 'Plan a Visit', href: routes.visit() };
+  const hasServiceBar = settings.serviceTimes.length > 0 || Boolean(settings.address);
 
   return (
-    <section className="on-dark bg-dark relative isolate -mt-[calc(4.5rem+1px)] flex min-h-[max(40rem,100svh)] flex-col justify-end overflow-clip">
+    <section className="on-dark bg-dark relative isolate -mt-18 flex min-h-[max(34rem,90svh)] flex-col justify-end overflow-clip">
       {hero?.media ? (
         <HeroMedia media={hero.media} />
       ) : (
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-20 bg-[radial-gradient(70%_60%_at_20%_100%,var(--color-primary-tint-strong),transparent_70%)]"
-        />
+        <div aria-hidden="true" className="bg-grain hero-ken-burns absolute inset-0 -z-20">
+          <div className="absolute inset-0 bg-[radial-gradient(90%_70%_at_50%_100%,var(--color-primary-tint-strong),transparent_65%)]" />
+        </div>
       )}
       {/* Legibility scrims: top for the transparent header, bottom for the copy. */}
       <div aria-hidden="true" className="from-dark/70 absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b to-transparent" />
-      <div aria-hidden="true" className="from-dark via-dark/60 absolute inset-0 -z-10 bg-gradient-to-t to-dark/10" />
+      <div aria-hidden="true" className="from-dark via-dark/70 absolute inset-0 -z-10 bg-gradient-to-t to-dark/20" />
 
-      <Container className="relative pb-14 pt-40 sm:pb-20">
-        <div className="animate-in fade-in-0 slide-in-from-bottom-4 max-w-4xl duration-700 motion-reduce:animate-none">
-          <LiveServiceBadge initial={serviceStatus} />
-          <h1 className="font-display text-display-2xl mt-6 font-semibold text-balance text-on-dark">{headline}</h1>
+      <Container className="relative flex flex-col items-center py-20 text-center sm:py-28">
+        <motion.div
+          initial={reduceMotion ? 'visible' : 'hidden'}
+          animate="visible"
+          variants={container}
+          className="flex max-w-4xl flex-col items-center"
+        >
+          <motion.div variants={rise}>
+            <LiveServiceBadge initial={serviceStatus} />
+          </motion.div>
+          <motion.h1
+            variants={reduceMotion ? rise : headlineRise}
+            className="font-display text-display-2xl mt-6 uppercase leading-[0.95] text-on-dark"
+          >
+            {headline}
+            {hero?.headlineAccent ? <span className="text-highlight block">{hero.headlineAccent}</span> : null}
+          </motion.h1>
           {subheadline ? (
-            <p className="text-muted mt-6 max-w-2xl text-body-lg text-pretty">{subheadline}</p>
+            <motion.p variants={rise} className="text-muted mt-6 max-w-xl text-body-lg text-pretty">
+              {subheadline}
+            </motion.p>
           ) : null}
-          <div className="mt-10 flex flex-wrap gap-3">
+          <motion.div variants={rise} className="mt-10 flex flex-wrap justify-center gap-3">
             <Button asChild size="lg">
               <Link href={primary.href}>
                 {primary.href === routes.watch() ? <Play className="h-4 w-4 fill-current" aria-hidden="true" /> : null}
                 {primary.label}
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-white/30 text-on-dark hover:bg-white/10">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="border-white/25 bg-white/10 text-on-dark shadow-[0_4px_24px_-8px_rgba(0,0,0,0.4)] backdrop-blur-md transition-[background-color,border-color] hover:border-white/40 hover:bg-white/20"
+            >
               <Link href={secondary.href}>{secondary.label}</Link>
             </Button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
+
+        {!hasServiceBar ? (
+          <span
+            aria-hidden="true"
+            className="border-on-dark/30 absolute bottom-0 left-1/2 hidden h-14 w-px -translate-x-1/2 animate-pulse sm:block"
+            style={{ background: 'linear-gradient(to bottom, transparent, var(--color-on-dark) 70%, transparent)' }}
+          />
+        ) : null}
       </Container>
 
       <HeroServiceBar settings={settings} />

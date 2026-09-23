@@ -10,21 +10,20 @@ import { QueryProvider } from "@/lib/query/provider";
 import { SiteShell } from "@/components/layout/site-shell";
 
 // Self-hosted (latin subset) so builds and dev never depend on reaching
-// Google Fonts. The variable names are the ones `globals.css` reads: a warm
-// display serif for headings, a grotesk sans for everything else.
+// Google Fonts. DM Sans for everything; Anton — an ultra-bold condensed
+// display face — for headlines, matching the reference direction: huge,
+// heavy, poster-like statement type, not a delicate serif.
 const body = localFont({
-  src: "./fonts/Inter-Variable.woff2",
+  src: "./fonts/DMSans-Variable.woff2",
   variable: "--font-body",
-  weight: "100 900",
+  weight: "400 700",
   display: "swap",
 });
 
 const display = localFont({
-  src: [
-    { path: "./fonts/Fraunces-Variable.woff2", weight: "400 700", style: "normal" },
-    { path: "./fonts/Fraunces-Italic-Variable.woff2", weight: "400 700", style: "italic" },
-  ],
+  src: "./fonts/Anton-Regular.woff2",
   variable: "--font-display-face",
+  weight: "400",
   display: "swap",
 });
 

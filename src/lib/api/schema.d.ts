@@ -462,6 +462,7 @@ export interface components {
         /** @description Homepage hero, authored by the church. Every field is optional. */
         Hero: {
             headline?: string;
+            headlineAccent?: string;
             subheadline?: string;
             media?: {
                 /** @enum {string} */
@@ -477,6 +478,7 @@ export interface components {
         Pillar: {
             title: string;
             description?: string;
+            imageUrl?: string;
         };
         ServiceStatus: {
             isLive: boolean;
@@ -559,6 +561,8 @@ export interface components {
             role?: string;
             bio?: string;
             photoUrl?: string;
+            secondaryPhotoUrl?: string;
+            socialLinks?: components["schemas"]["SocialLinks"];
             order?: number;
         };
         Location: {
