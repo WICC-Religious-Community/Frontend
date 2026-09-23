@@ -1,4 +1,6 @@
 import type { SVGProps } from 'react';
+import type { SocialLinks } from '@/domain/site/model';
+import { cn } from '@/lib/utils/cn';
 
 /**
  * lucide-react dropped brand/logo icons (trademark reasons) — these three
@@ -38,5 +40,38 @@ export function Youtube(props: SVGProps<SVGSVGElement>) {
       <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
       <path d="m10 15 5-3-5-3z" />
     </svg>
+  );
+}
+
+const platformIcons = { facebook: Facebook, instagram: Instagram, youtube: Youtube } as const;
+
+/**
+ * The one "row of social icon links" treatment — reused by the footer (site
+ * socials) and the pastor spotlight (a leader's own). Renders nothing when
+ * there are no links at all, and skips any platform that isn't set, rather
+ * than showing a dead/disabled icon.
+ */
+export function SocialLinksRow({ links, className }: { links?: SocialLinks; className?: string }) {
+  const entries = (Object.keys(platformIcons) as (keyof typeof platformIcons)[]).filter(key => links?.[key]);
+  if (entries.length === 0) return null;
+
+  return (
+    <div className={cn('flex gap-3', className)}>
+      {entries.map(key => {
+        const Icon = platformIcons[key];
+        return (
+          <a
+            key={key}
+            href={links![key]}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={key}
+            className="border-border bg-surface text-muted hover:border-primary hover:bg-primary hover:text-on-primary flex h-10 w-10 items-center justify-center rounded-full border transition-colors"
+          >
+            <Icon className="h-4 w-4" />
+          </a>
+        );
+      })}
+    </div>
   );
 }

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Page, Section, type SectionTone } from '@/components/primitives';
 import { Hero } from '@/features/home/hero';
 import { Pillars } from '@/features/home/pillars';
+import { PastorSpotlight } from '@/features/home/pastor-spotlight';
 import { ServiceTimes } from '@/features/home/service-times';
 import { SermonSpotlight } from '@/features/home/sermon-spotlight';
 import { EventsStrip } from '@/features/home/events-strip';
@@ -18,6 +19,7 @@ import { getMinistries } from '@/domain/ministries/server';
 import { getLocations } from '@/domain/locations/server';
 import { getGivingAccounts } from '@/domain/giving/server';
 import { getTestimonials } from '@/domain/testimonials/server';
+import { getLeaders } from '@/domain/leadership/server';
 
 interface HomeSection {
   key: string;
@@ -27,7 +29,7 @@ interface HomeSection {
 }
 
 export default async function HomePage() {
-  const [settings, serviceStatus, sermonPage, eventPage, ministries, locations, givingAccounts, testimonials] =
+  const [settings, serviceStatus, sermonPage, eventPage, ministries, locations, givingAccounts, testimonials, leaders] =
     await Promise.all([
       getSiteSettings(),
       getServiceStatus(),
@@ -37,12 +39,19 @@ export default async function HomePage() {
       getLocations(),
       getGivingAccounts(),
       getTestimonials(6),
+      getLeaders(),
     ]);
+  // The first published leader is treated as the senior pastor for this
+  // spotlight — the same "first = featured" convention the sermon and
+  // events sections already use, so ordering leaders once (via `order`)
+  // controls both the leadership page and this homepage introduction.
+  const seniorPastor = leaders[0];
 
   // Every section below the hero exists only when the church has published
   // the content for it — there is no placeholder content anywhere.
   const candidates: Array<HomeSection | false> = [
     settings.pillars.length > 0 && { key: 'pillars', node: <Pillars pillars={settings.pillars} /> },
+    Boolean(seniorPastor) && { key: 'pastor-spotlight', node: <PastorSpotlight leader={seniorPastor} /> },
     settings.serviceTimes.length > 0 && {
       key: 'service-times',
       node: <ServiceTimes serviceTimes={settings.serviceTimes} address={settings.address} />,

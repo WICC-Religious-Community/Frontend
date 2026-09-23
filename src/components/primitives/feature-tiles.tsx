@@ -36,7 +36,7 @@ export function FeatureTiles({ items, featureFirst = false }: { items: FeatureTi
               alt={item.title}
               fill
               sizes="(min-width: 1024px) 40vw, (min-width: 640px) 60vw, 100vw"
-              className="h-full"
+              className="absolute inset-0 h-full rounded-none"
               imageClassName="group-hover:scale-105"
             />
             <div className="from-dark/80 absolute inset-x-0 top-0 h-32 bg-gradient-to-b to-transparent" aria-hidden="true" />

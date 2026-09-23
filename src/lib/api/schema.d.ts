@@ -561,6 +561,8 @@ export interface components {
             role?: string;
             bio?: string;
             photoUrl?: string;
+            secondaryPhotoUrl?: string;
+            socialLinks?: components["schemas"]["SocialLinks"];
             order?: number;
         };
         Location: {

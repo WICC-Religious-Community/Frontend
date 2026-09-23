@@ -1,6 +1,15 @@
 import { z } from 'zod';
 import type { Leader } from './model';
 
+const socialLinksSchema = z.object({
+  facebook: z.string().optional(),
+  instagram: z.string().optional(),
+  youtube: z.string().optional(),
+  tiktok: z.string().optional(),
+  x: z.string().optional(),
+  whatsapp: z.string().optional(),
+});
+
 const leaderSchema = z.object({
   id: z.string(),
   slug: z.string(),
@@ -8,6 +17,8 @@ const leaderSchema = z.object({
   role: z.string().optional(),
   bio: z.string().optional(),
   photoUrl: z.string().optional(),
+  secondaryPhotoUrl: z.string().optional(),
+  socialLinks: socialLinksSchema.optional(),
   order: z.number().optional(),
 });
 
